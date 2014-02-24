@@ -1,6 +1,6 @@
 *.iml
 *.iws
-*.ipl
+*.ipr
 *Db.properties
 *Db.script
 .classpath
