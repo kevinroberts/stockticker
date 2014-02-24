@@ -14,15 +14,12 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <r:require modules="application"/>
         <link href="${resource(dir: 'css', file: 'custom-bootstrap.generated.css')}" type="text/css" rel="stylesheet" media="screen, projection">
         <link href="${resource(dir: 'css', file: 'theme.generated.css')}" type="text/css" rel="stylesheet" media="screen, projection">
 		<g:layoutHead/>
-        <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-		<r:layoutResources />
+        <script data-main="js/app" src="${resource(dir: 'js/lib', file: 'require.js')}"></script>
 	</head>
 	<body>
 		<g:layoutBody/>
-		<r:layoutResources />
 	</body>
 </html>
