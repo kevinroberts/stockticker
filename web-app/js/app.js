@@ -9,11 +9,15 @@ requirejs.config({
         "jquery": "../lib/jquery.min",
         "jquery.bootstrap" : "../lib/bootstrap",
         "knockout" : "../lib/knockout-3.0.0",
-        "appViewModel" : "../model/appViewModel"
+        "appViewModel" : "../model/appViewModel",
+        "jquery.sortable" : "../lib/jquery-sortable"
     },
     "shim": {
         "jquery.bootstrap": {
             // jQuery
+            deps: ["jquery"]
+        },
+        "jquery.sortable": {
             deps: ["jquery"]
         }
     }
@@ -21,4 +25,6 @@ requirejs.config({
 
 // Load the main app module to start the app
 requirejs(["app/main"]);
+requirejs(["app/sortable"]);
 requirejs(["app/initKnockout"]);
+
