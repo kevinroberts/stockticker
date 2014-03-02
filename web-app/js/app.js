@@ -19,6 +19,10 @@ requirejs.config({
         },
         "jquery.sortable": {
             deps: ["jquery"]
+        },
+        knockout:{
+            deps: ["jquery"],
+            exports: "knockout"
         }
     }
 });
