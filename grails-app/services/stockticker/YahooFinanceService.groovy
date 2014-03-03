@@ -1,5 +1,6 @@
 package stockticker
 
+import org.apache.commons.lang.StringEscapeUtils
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class YahooFinanceService {
@@ -25,7 +26,8 @@ class YahooFinanceService {
 
 
     def Error noResultsReturned(def symbol) {
-        Error error = new Error()
+        symbol = StringEscapeUtils.escapeHtml(String.valueOf(symbol));
+		Error error = new Error()
         error.setCode("No Results")
         error.setMessage("No stock could be found with the symbol \"" + symbol + "\"");
         error.setDetailedMessage("")

@@ -1,13 +1,13 @@
 {
-	"devDependencies": {
-		"grunt": "~0.4.0",
-        "grunt-contrib-watch": "~0.5.3",
-        "grunt-macreload": "~0.1.3",
-		"grunt-contrib-connect": "~0.3.0",
-		"grunt-contrib-less": "~0.9.0"
-	},
-    "options": {
-        "browser": "chrome",
-        "grails_tomcat_work": "../../target/tomcat/work"
-    }
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-macreload": "~0.1.3",
+    "grunt-contrib-connect": "~0.3.0",
+    "grunt-contrib-less": "~0.9.0"
+  },
+  "options": {
+    "browser": "chrome",
+    "grails_tomcat_work": "../../target/tomcat/work"
+  }
 }

@@ -1,38 +1,6 @@
 // Main viewmodel class
-define(['knockout', 'bootbox', 'blockui'], function(ko, bootbox) {
+define(['knockout', 'bootbox', 'utils', 'blockui'], function(ko, bootbox, stockticker) {
 
-
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000)
-            .toString(16)
-            .substring(1);
-    }
-
-    function guid() {
-        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4();
-    }
-
-    function showMessage(message) {
-        if ($('#errorMsg').is(':visible')) {
-            $("#errorMessage").html(message);
-        } else {
-            $("#errorMessage").html(message);
-            $('#errorMsg').slideDown().delay(5000).fadeOut();
-        }
-    }
-
-    function showLoadingMessage(message) {
-        $.blockUI({ css: {
-            border: 'none',
-            padding: '15px',
-            backgroundColor: '#000',
-            '-webkit-border-radius': '10px',
-            '-moz-border-radius': '10px',
-            opacity: .5,
-            color: '#fff' },
-            message: '<h1> ' + message + '</h1>' });
-    }
 
     var Stock = function (id, symbol, name, price, priceChange) {
         var self = this;
@@ -107,14 +75,14 @@ define(['knockout', 'bootbox', 'blockui'], function(ko, bootbox) {
                     console.log("Stock symbol not entered in bootbox dialog");
                 } else {
                     var symbol = encodeURI(result);
-                    showLoadingMessage("Loading stock information...");
+					stockticker.utils.showLoadingMessage("Loading stock information...");
                     $.getJSON("/stockticker/home/priceQuote?symbol=" + symbol, function(stockData) {
                         $.unblockUI();
                         if (stockData.error && stockData.error.code) {
                             console.log("Contains errors!", stockData.error);
-                            showMessage(stockData.error.message);
+							stockticker.utils.showMessage(stockData.error.message);
                         } else {
-                            self.stocks.push( new Stock(guid(), stockData.symbol, stockData.name, stockData.price, stockData.change));
+                            self.stocks.push( new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change));
                         }
 
                     });

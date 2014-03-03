@@ -1,12 +1,3 @@
-var folderMount, lrSnippet, path;
-
-path = require("path");
-
-lrSnippet = require("grunt-contrib-livereload/lib/utils").livereloadSnippet;
-
-folderMount = folderMount = function (connect, point) {
-	return connect["static"](path.resolve(point));
-};
 
 module.exports = function (grunt) {
 	var pkg;
