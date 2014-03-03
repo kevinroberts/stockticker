@@ -8,14 +8,24 @@ requirejs.config({
         "app": "../app",
         "jquery": "../lib/jquery.min",
         "jquery.bootstrap" : "../lib/bootstrap",
+        "bootbox" : "../lib/bootbox",
         "knockout" : "../lib/knockout-3.0.0",
         "appViewModel" : "../model/appViewModel",
+        "blockui" : "../lib/jquery.blockUI",
         "jquery.sortable" : "../lib/jquery-sortable"
+
     },
     "shim": {
+        "blockui" : {
+            deps: ["jquery"]
+        },
         "jquery.bootstrap": {
             // jQuery
             deps: ["jquery"]
+        },
+        "bootbox": {
+            deps: ["jquery", "jquery.bootstrap"],
+            exports: "bootbox"
         },
         "jquery.sortable": {
             deps: ["jquery"]
@@ -28,7 +38,6 @@ requirejs.config({
 });
 
 // Load the main app module to start the app
-requirejs(["app/main"]);
-requirejs(["app/sortable"]);
-requirejs(["app/initKnockout"]);
+
+requirejs(["app/main", "app/sortable", "app/initKnockout"]);
 

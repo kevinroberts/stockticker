@@ -1,6 +1,6 @@
 define(["jquery", "jquery.sortable"], function($) {
 
-    $('#stockTickerTable').sortable({
+    $('#stockTickerTable tbody').sortable({
         containerSelector: 'table',
         itemPath: '> tbody',
         itemSelector: 'tr',

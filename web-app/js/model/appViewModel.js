@@ -1,8 +1,42 @@
 // Main viewmodel class
-define(['knockout'], function(ko) {
+define(['knockout', 'bootbox', 'blockui'], function(ko, bootbox) {
 
-    var Stock = function (symbol, name, price, priceChange) {
+
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+
+    function guid() {
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    }
+
+    function showMessage(message) {
+        if ($('#errorMsg').is(':visible')) {
+            $("#errorMessage").html(message);
+        } else {
+            $("#errorMessage").html(message);
+            $('#errorMsg').slideDown().delay(5000).fadeOut();
+        }
+    }
+
+    function showLoadingMessage(message) {
+        $.blockUI({ css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff' },
+            message: '<h1> ' + message + '</h1>' });
+    }
+
+    var Stock = function (id, symbol, name, price, priceChange) {
         var self = this;
+        self.id = id;
         self.symbol = symbol;
         self.name = name;
         self.price = price;
@@ -40,22 +74,53 @@ define(['knockout'], function(ko) {
 
         // initial data
         self.stocks = ko.observableArray([
-            new Stock("AGNC", "American Capital Agency Corp.", 22.29, -0.09),
-            new Stock("GOOG", "Google Inc", 1215.65, +123.56),
-            new Stock("APPL", "Apple Inc.", 526.24, -1.43)
         ]);
 
         //console.log("Stocks", self.stocks);
 
-        self.removeStock = function(stock) { self.stocks.remove(stock) }
+        self.removeStock = function(stock) {
+            self.stocks.remove(stock);
+        };
 
-        self.clearStocks = function() { self.stocks.removeAll(); }
+        self.clearStocks = function() {
+            bootbox.confirm("Are you sure?", function(result) {
+                if (result) {
+                    self.stocks.removeAll();
+                }
+            });
+        };
+
+        self.removeBySymbol = function() {
+            bootbox.prompt("Enter Stock Symbol: ", function(result) {
+                if (result === null) {
+                    console.log("Stock symbol not entered in bootbox dialog");
+                } else {
+                    console.log("removing stock - " + result);
+                    self.stocks.remove(function(item) { return item.symbol == result })
+                }
+            });
+        };
 
         self.addStock = function() {
-            // TODO change to input next to add symbol
-            var symbol = prompt("Enter Stock Symbol", "");
-            if (symbol!=null)
-            self.stocks.push( new Stock(symbol, "Apple Inc.", 526.24, -1.43));
+            bootbox.prompt("Enter Stock Symbol: ", function(result) {
+                if (result === null) {
+                    console.log("Stock symbol not entered in bootbox dialog");
+                } else {
+                    var symbol = encodeURI(result);
+                    showLoadingMessage("Loading stock information...");
+                    $.getJSON("/stockticker/home/priceQuote?symbol=" + symbol, function(stockData) {
+                        $.unblockUI();
+                        if (stockData.error && stockData.error.code) {
+                            console.log("Contains errors!", stockData.error);
+                            showMessage(stockData.error.message);
+                        } else {
+                            self.stocks.push( new Stock(guid(), stockData.symbol, stockData.name, stockData.price, stockData.change));
+                        }
+
+                    });
+
+                }
+            });
         }
     };
 });
