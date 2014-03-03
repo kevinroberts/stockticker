@@ -22,6 +22,15 @@
                 </h4>
                 <p id="errorMessage" class="message"></p>
             </div>
+            <button class="btn btn-default" data-bind="popover: {template: 'popoverTemplate', title: 'Oh Yea', trigger: 'focus'}">
+                Launch Simple Popover
+            </button>
+            <br>
+            <script type="text/html" id="popoverTemplate">
+                <button class="close pull-right" type="button" data-dismiss="popover">×</button>
+                Hey I am some content in A popover
+            </script>
+
             <div class="action-group">
             <div class="btn-group">
                 <button class="btn btn-default" data-bind="click: addStock"><span class="glyphicon glyphicon-plus"></span> Add Stock</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>

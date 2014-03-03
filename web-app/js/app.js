@@ -12,9 +12,8 @@ requirejs.config({
         "knockout" : "../lib/knockout-3.0.0",
         "appViewModel" : "../model/appViewModel",
         "blockui" : "../lib/jquery.blockUI",
+		"knockout-bootstrap" : "../lib/knockout-bootstrap",
 		"utils" : "../app/utils"
-
-
     },
     "shim": {
         "blockui" : {
@@ -34,7 +33,10 @@ requirejs.config({
         knockout:{
             deps: ["jquery"],
             exports: "knockout"
-        }
+        },
+		"knockout-bootstrap" : {
+			deps: ["jquery", "jquery.bootstrap" , "knockout"]
+		}
     }
 });
 

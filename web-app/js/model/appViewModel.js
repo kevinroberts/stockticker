@@ -1,5 +1,5 @@
 // Main viewmodel class
-define(['knockout', 'bootbox', 'utils', 'blockui'], function(ko, bootbox, stockticker) {
+define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, stockticker) {
 
 
     var Stock = function (id, symbol, name, price, priceChange) {
@@ -44,8 +44,6 @@ define(['knockout', 'bootbox', 'utils', 'blockui'], function(ko, bootbox, stockt
         self.stocks = ko.observableArray([
         ]);
 
-        //console.log("Stocks", self.stocks);
-
         self.removeStock = function(stock) {
             self.stocks.remove(stock);
         };
@@ -80,7 +78,7 @@ define(['knockout', 'bootbox', 'utils', 'blockui'], function(ko, bootbox, stockt
                         $.unblockUI();
                         if (stockData.error && stockData.error.code) {
                             console.log("Contains errors!", stockData.error);
-							stockticker.utils.showMessage(stockData.error.message);
+							stockticker.utils.showAlertMessage(stockData.error.message);
                         } else {
                             self.stocks.push( new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change));
                         }

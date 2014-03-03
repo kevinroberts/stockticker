@@ -26,7 +26,7 @@ define(function () {
 			stockticker.utils.s4() + '-' + stockticker.utils.s4() + stockticker.utils.s4() + stockticker.utils.s4();
 	}
 
-	stockticker.utils.showMessage = function(message) {
+	stockticker.utils.showAlertMessage = function(message) {
 		if ($('#errorMsg').is(':visible')) {
 			$("#errorMessage").html(message);
 		} else {
