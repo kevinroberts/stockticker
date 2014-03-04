@@ -49,7 +49,7 @@ define(function () {
 
 	stockticker.utils.showStockLoadingMessage = function(message) {
 		$('.stockTickerList').block({
-			message: '<h1>' + message + '</h1>',
+			message: '<h1> <img src="' + document.documentURI + 'images/spinner.gif" /> ' + message + '</h1>',
 			css: { border: '3px solid #a00' }
 		});
 	}

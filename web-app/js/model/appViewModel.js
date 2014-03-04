@@ -89,9 +89,19 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
                         console.log("Contains errors!", stockData.error);
                         stockticker.utils.showAlertMessage(stockData.error.message);
                     } else {
-                        self.stocks.push( new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change));
-                    }
+						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change);
 
+						var match = ko.utils.arrayFirst(self.stocks(), function(item) {
+							return stock.symbol === item.symbol;
+						});
+
+						if (!match) {
+							console.log('adding new stock: ', stock);
+							self.stocks.push(stock);
+						} else {
+							stockticker.utils.showAlertMessage("Symbol is already entered.");
+						}
+                    }
                 });
             } else {
                 stockticker.utils.showAlertMessage("Invalid ticker symbol entered.");
