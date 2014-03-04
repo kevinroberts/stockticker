@@ -47,6 +47,13 @@ define(function () {
 			message: '<h1> ' + message + '</h1>' });
 	}
 
+	stockticker.utils.showStockLoadingMessage = function(message) {
+		$('.stockTickerList').block({
+			message: '<h1>' + message + '</h1>',
+			css: { border: '3px solid #a00' }
+		});
+	}
+
 
 	return stockticker;
 });

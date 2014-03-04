@@ -14,15 +14,15 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <g:if test="${grails.util.Environment.current == grails.util.Environment.DEVELOPMENT}">
-            <link href="${resource(dir: 'css', file: 'custom-bootstrap.generated.css')}" type="text/css" rel="stylesheet" media="screen, projection">
-            <link href="${resource(dir: 'css', file: 'theme.generated.css')}" type="text/css" rel="stylesheet" media="screen, projection">
-            <script data-main="js/app" src="${resource(dir: 'js/lib', file: 'require.js')}"></script>
-        </g:if>
-        <g:else>
+        <g:if test="${grails.util.Environment.current == grails.util.Environment.PRODUCTION}">
             <link href="${resource(dir: 'css', file: 'custom-bootstrap.generated.min.css')}" type="text/css" rel="stylesheet" media="screen, projection">
             <link href="${resource(dir: 'css', file: 'theme.generated.min.css')}" type="text/css" rel="stylesheet" media="screen, projection">
             <script src="${resource(dir: 'js', file: 'app-optimized.js')}"></script>
+        </g:if>
+        <g:else>
+            <link href="${resource(dir: 'css', file: 'custom-bootstrap.generated.css')}" type="text/css" rel="stylesheet" media="screen, projection">
+            <link href="${resource(dir: 'css', file: 'theme.generated.css')}" type="text/css" rel="stylesheet" media="screen, projection">
+            <script data-main="js/app" src="${resource(dir: 'js/lib', file: 'require.js')}"></script>
         </g:else>
 		<g:layoutHead/>
 

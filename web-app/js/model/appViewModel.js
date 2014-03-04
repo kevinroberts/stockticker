@@ -2,12 +2,12 @@
 define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, stockticker) {
 
     // Document wide AJAX loading screen
-    $(document).ajaxStart(function() {
-            stockticker.utils.showLoadingMessage("Loading stock information...");
-    }).ajaxComplete(function() {
-            $.unblockUI();
-            $("#symbolToAdd").val('');
-    });
+//    $(document).ajaxStart(function() {
+//            stockticker.utils.showLoadingMessage("Loading stock information...");
+//    }).ajaxComplete(function() {
+//            $.unblockUI();
+//            $("#symbolToAdd").val('');
+//    });
 
     var Stock = function (id, symbol, name, price, priceChange) {
         var self = this;
@@ -82,10 +82,10 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
         self.addStock = function() {
             if (this.symbolToAdd() && this.stockSymbolIsValid()) {
                 var symbol = encodeURI(this.symbolToAdd());
-
+				stockticker.utils.showStockLoadingMessage("Loading...");
                 $.getJSON(document.documentURI + "symbol/" + symbol, function(stockData) {
-
-                    if (stockData.error && stockData.error.code) {
+					$('.stockTickerList').unblock();
+					if (stockData.error && stockData.error.code) {
                         console.log("Contains errors!", stockData.error);
                         stockticker.utils.showAlertMessage(stockData.error.message);
                     } else {
