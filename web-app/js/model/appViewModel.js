@@ -83,7 +83,7 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
             if (this.symbolToAdd() && this.stockSymbolIsValid()) {
                 var symbol = encodeURI(this.symbolToAdd());
 				stockticker.utils.showStockLoadingMessage("Loading...");
-                $.getJSON(document.documentURI + "symbol/" + symbol, function(stockData) {
+                $.getJSON(window.location.href.split('?')[0] + "symbol/" + symbol, function(stockData) {
 					$('.stockTickerList').unblock();
 					if (stockData.error && stockData.error.code) {
                         console.log("Contains errors!", stockData.error);

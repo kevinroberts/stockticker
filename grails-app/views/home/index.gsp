@@ -14,7 +14,7 @@
     <div class="row clearfix">
         <div class="col-md-12 column">
             <div class="page-header">
-                <h1>Stockticker <span>a knockout require js app</span></h1>
+                <h1>Stockticker <span>v. <%=grailsApplication.metadata['app.version']%> a knockout require js app</span></h1>
             </div>
             <div id="errorMsg" class="alert alert-danger" style="display: none;">
                 <h4>
