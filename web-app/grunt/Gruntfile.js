@@ -24,6 +24,7 @@ module.exports = function (grunt) {
 			  name: "app",
 	          baseUrl: "../js/lib",
 		      mainConfigFile: "../js/app.js",
+			  include: ['require.js'],
 		      out: "../js/app-optimized.js"
 	        }
 	      }
