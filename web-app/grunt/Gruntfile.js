@@ -4,6 +4,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks("grunt-contrib-connect");
 	grunt.loadNpmTasks("grunt-contrib-less");
+	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	pkg = grunt.file.readJSON("package.json");
 	grunt.initConfig({
 		pkg: pkg,
@@ -17,6 +18,16 @@ module.exports = function (grunt) {
               files: ["<%= pkg.options.grails_tomcat_work %>/**/*.js", "<%= pkg.options.grails_tomcat_work %>/**/*.css"],
           }
         },
+	    requirejs: {
+	      compile: {
+	        options: {
+			  name: "app",
+	          baseUrl: "../js/lib",
+		      mainConfigFile: "../js/app.js",
+		      out: "../js/app-optimized.js"
+	        }
+	      }
+	    },
 		less: {
 			dev: {
 				options: {
@@ -45,5 +56,7 @@ module.exports = function (grunt) {
 			}
 		}
 	});
+	grunt.registerTask("assets", ["requirejs"]);
+	
 	return grunt.registerTask("default", ["watch"]);
 };
