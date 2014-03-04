@@ -44,14 +44,14 @@ module.exports = function (grunt) {
 			prod: {
 				options: {
 					strictMath: true,
-					sourceMap: true,
+					sourceMap: false,
 					outputSourceFiles: true,
 					paths: ["../less"],
-					yuicompress: true
+					cleancss: true
 				},
 				files: {
 					"../css/custom-bootstrap.generated.min.css": "../less/bootstrap.less",
-					"../css/theme.generated.css": "../less/theme.less"
+					"../css/theme.generated.min.css": "../less/theme.less"
 				}
 			}
 		}
