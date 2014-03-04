@@ -7,6 +7,11 @@ class UrlMappings {
 			}
 		}
 
+        name symbol: "/symbol/$symbol" {
+            controller = "home"
+            action = "priceQuote"
+        }
+
 		"/"(controller: 'home', action: 'index')
 		"500"(view:'/error')
 	}

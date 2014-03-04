@@ -34,11 +34,20 @@ class HomeController {
                     } else {
                         stockResult.setSymbol(symbolJson.getString('Symbol'))
                         stockResult.setName(symbolJson.getString('Name'))
-                        stockResult.setPrice(new BigDecimal(symbolJson.getDouble('BidRealtime')))
+
+                        BigDecimal price = new BigDecimal(0.00)
+                        if (symbolJson.getDouble('BidRealtime') != null && symbolJson.getDouble('BidRealtime') > 0) {
+                            price = new BigDecimal(symbolJson.getDouble('BidRealtime'))
+                        } else if (symbolJson.getDouble('LastTradePriceOnly') != null) {
+                            price = new BigDecimal(symbolJson.getDouble('LastTradePriceOnly'))
+                        }
+
+                        stockResult.setPrice(price)
                         stockResult.setChange(new BigDecimal(symbolJson.getDouble('Change')))
                         stockResult.setPercentChange(symbolJson.getString('PercentChange'))
                         Error error = new Error();
                         stockResult.setError(error)
+
                     }
 
                 } else {

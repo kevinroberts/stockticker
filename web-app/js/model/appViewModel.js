@@ -1,6 +1,13 @@
 // Main viewmodel class
 define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, stockticker) {
 
+    // Document wide AJAX loading screen
+    $(document).ajaxStart(function() {
+            stockticker.utils.showLoadingMessage("Loading stock information...");
+    }).ajaxComplete(function() {
+            $.unblockUI();
+            $("#symbolToAdd").val('');
+    });
 
     var Stock = function (id, symbol, name, price, priceChange) {
         var self = this;
@@ -41,8 +48,13 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
         var self = this;
 
         // initial data
-        self.stocks = ko.observableArray([
-        ]);
+        self.stocks = ko.observableArray([]);
+
+        this.symbolToAdd = ko.observable("");
+
+        this.stockSymbolIsValid = ko.computed(function() {
+            return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^]{1,15}\s*$/) != null);
+        }, this);
 
         self.removeStock = function(stock) {
             self.stocks.remove(stock);
@@ -68,25 +80,24 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
         };
 
         self.addStock = function() {
-            bootbox.prompt("Enter Stock Symbol: ", function(result) {
-                if (result === null) {
-                    console.log("Stock symbol not entered in bootbox dialog");
-                } else {
-                    var symbol = encodeURI(result);
-					stockticker.utils.showLoadingMessage("Loading stock information...");
-                    $.getJSON("/stockticker/home/priceQuote?symbol=" + symbol, function(stockData) {
-                        $.unblockUI();
-                        if (stockData.error && stockData.error.code) {
-                            console.log("Contains errors!", stockData.error);
-							stockticker.utils.showAlertMessage(stockData.error.message);
-                        } else {
-                            self.stocks.push( new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change));
-                        }
+            if (this.symbolToAdd() && this.stockSymbolIsValid()) {
+                var symbol = encodeURI(this.symbolToAdd());
 
-                    });
+                $.getJSON(document.documentURI + "symbol/" + symbol, function(stockData) {
 
-                }
-            });
+                    if (stockData.error && stockData.error.code) {
+                        console.log("Contains errors!", stockData.error);
+                        stockticker.utils.showAlertMessage(stockData.error.message);
+                    } else {
+                        self.stocks.push( new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change));
+                    }
+
+                });
+            } else {
+                stockticker.utils.showAlertMessage("Invalid ticker symbol entered.");
+            }
         }
+
+
     };
 });
