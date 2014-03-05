@@ -4,6 +4,6 @@ require(['knockout', 'appViewModel', 'domReady!'], function(ko, appViewModel) {
 
     ko.applyBindings(viewModel);
 
-	setInterval(viewModel.updateStockTicker, 5000);
+	setInterval(viewModel.updateStockTicker, 4000);
 
 });

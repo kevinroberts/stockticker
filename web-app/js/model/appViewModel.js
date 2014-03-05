@@ -115,8 +115,25 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
 			// iterate through stock array and fetch updated information
 			stockticker.utils.log("updating stock tickers - " + (new Date()).getTime());
 			if (self.stocks().length > 0) {
+				ko.utils.arrayForEach(self.stocks(), function(item) {
+					console.log("updating: " + item.symbol);
+					$.getJSON(window.location.href.split('?')[0] + "symbol/" + item.symbol, function(stockData) {
+						if (stockData.error && stockData.error.code) {
+							stockticker.utils.log("Service call contains errors...", stockData.error);
+							stockticker.utils.showAlertMessage(stockData.error.message);
+						} else {
+							item.name = stockData.name + " - " + (new Date()).getTime();
+							item.symbol = stockData.symbol;
+							item.price = stockData.price;
+							item.priceChange = stockData.change;
+							item.percentChange = stockData.percentChange;
+						}
+					});
+				});
 
 			}
+
+
 		}
 
 
