@@ -49,9 +49,19 @@ define(function () {
 
 	stockticker.utils.showStockLoadingMessage = function(message) {
 		$('.stockTickerList').block({
-			message: '<h1> <img src="' + window.location.href.split('?')[0] + 'images/spinner.gif" /> ' + message + '</h1>',
-			css: { border: '3px solid #a00' }
+			message: '<h3> <img src="' + window.location.href.split('?')[0] + 'images/spinner.gif" /> ' + message + '</h3>',
+			css: { border: '2px solid #a00' }
 		});
+	}
+
+	stockticker.utils.log = function(message, obj) {
+		if (typeof console == "object") {
+			if (obj && typeof(obj) != "undefined"){
+				console.log(message, obj);
+			} else {
+				console.log(message);
+			}
+		}
 	}
 
 

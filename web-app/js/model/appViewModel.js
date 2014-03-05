@@ -9,13 +9,14 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
 //            $("#symbolToAdd").val('');
 //    });
 
-    var Stock = function (id, symbol, name, price, priceChange) {
+    var Stock = function (id, symbol, name, price, priceChange, percentChange) {
         var self = this;
         self.id = id;
         self.symbol = symbol;
         self.name = name;
         self.price = price;
         self.priceChange = priceChange;
+		self.percentChange = percentChange;
 
         self.formattedPrice = ko.computed(function() {
             var price = self.price;
@@ -36,8 +37,8 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
             if (percentChange > 0) {
                 positiveSign = '+';
             }
-
-            var str = percentChange ? positiveSign + priceChange + " (" + positiveSign + percentChange.toFixed(3) + "%" + ")" : "N/A";
+			// use pre-formatted percent change provided by webservice call
+            var str = percentChange ? positiveSign + priceChange + " (" + self.percentChange + ")" : "N/A";
 
             return str;
         });
@@ -71,9 +72,9 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
         self.removeBySymbol = function() {
             bootbox.prompt("Enter Stock Symbol: ", function(result) {
                 if (result === null) {
-                    console.log("Stock symbol not entered in bootbox dialog");
+                    stockticker.utils.log("Stock symbol not entered in bootbox dialog");
                 } else {
-                    console.log("removing stock - " + result);
+                    stockticker.utils.log("removing stock - " + result);
                     self.stocks.remove(function(item) { return item.symbol == result })
                 }
             });
@@ -86,18 +87,20 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
                 $.getJSON(window.location.href.split('?')[0] + "symbol/" + symbol, function(stockData) {
 					$('.stockTickerList').unblock();
 					if (stockData.error && stockData.error.code) {
-                        console.log("Contains errors!", stockData.error);
+                        stockticker.utils.log("Service call contains errors...", stockData.error);
                         stockticker.utils.showAlertMessage(stockData.error.message);
                     } else {
-						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change);
+						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change, stockData.percentChange);
 
 						var match = ko.utils.arrayFirst(self.stocks(), function(item) {
 							return stock.symbol === item.symbol;
 						});
 
+						// validate that the entered symbol is new
 						if (!match) {
-							console.log('adding new stock: ', stock);
+							stockticker.utils.log('adding new stock: ', stock);
 							self.stocks.push(stock);
+							self.symbolToAdd(''); // clear the entered symbol for next input
 						} else {
 							stockticker.utils.showAlertMessage("Symbol is already entered.");
 						}
@@ -107,6 +110,14 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
                 stockticker.utils.showAlertMessage("Invalid ticker symbol entered.");
             }
         }
+
+		self.updateStockTicker = function() {
+			// iterate through stock array and fetch updated information
+			stockticker.utils.log("updating stock tickers - " + (new Date()).getTime());
+			if (self.stocks().length > 0) {
+
+			}
+		}
 
 
     };
