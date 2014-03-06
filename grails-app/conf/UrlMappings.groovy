@@ -12,6 +12,11 @@ class UrlMappings {
             action = "priceQuote"
         }
 
+		name symbolScraped: "/symbolScraped/$symbol" {
+			controller = "home"
+			action = "priceQuoteScraped"
+		}
+
 		"/"(controller: 'home', action: 'index')
 		"500"(view:'/error')
 	}

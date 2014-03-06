@@ -44,6 +44,7 @@ grails.project.dependency.resolution = {
 
         // runtime 'mysql:mysql-connector-java:5.1.22'
         runtime 'org.springframework:spring-test:3.1.0.RELEASE'
+		runtime 'org.ccil.cowan.tagsoup:tagsoup:1.2.1'
     }
 
     plugins {

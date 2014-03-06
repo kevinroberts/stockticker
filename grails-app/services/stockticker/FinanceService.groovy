@@ -1,6 +1,8 @@
 package stockticker
 
+import groovy.util.slurpersupport.GPathResult
 import org.apache.commons.lang.StringEscapeUtils
+import org.apache.commons.lang.StringUtils
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class FinanceService {
@@ -25,6 +27,61 @@ class FinanceService {
 
         return new JSONObject(json.toString())
     }
+
+	def StockResult getStockResultScraped(String stockSymbol) {
+		def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
+		def slurper = new XmlSlurper(tagsoupParser)
+		GPathResult htmlParser = slurper.parse("http://uk.advfn.com/p.php?pid=qkquote&btn=&epic=$stockSymbol&symbol=")
+
+		StockResult stockResult = new StockResult()
+
+		try {
+			int i = 0;
+			htmlParser.'**'.find{ it['@id'] == 'q_desc'}.'**'.findAll{ it.name() == 'td'}.each {
+				String value = it.text()
+				if (i == 0) {
+					// this is stock name
+					if (value)
+						stockResult.setName(StringUtils.replace(value, "Name:", ""));
+				}
+				if (i == 1) {
+					if (value)
+						stockResult.setSymbol(StringUtils.replace(value, "Symbol:", ""));
+				}
+				i++;
+			}
+
+			// get price information
+			i = 0;
+			htmlParser.'**'.findAll{ it['@class'] == 'mb'}.each {
+				String value = it.text()
+				// change in value
+				if (i == 15) {
+					stockResult.setChange(new BigDecimal(value))
+				}
+				if (i == 16) {
+					stockResult.setPercentChange(value + "%")
+				}
+				if (i == 17) {
+					stockResult.setPrice(new BigDecimal(value))
+				}
+
+				i++
+			}
+
+			if (!stockResult.name) {
+				stockResult.setError(this.noResultsReturned(stockSymbol))
+			}
+		} catch (Exception e) {
+			log.error("Exception reached trying to parse stock quote", e)
+			stockResult.setError(this.noResultsReturned(stockSymbol))
+		}
+
+
+
+		return stockResult
+
+	}
 
 
     def Error noResultsReturned(def symbol) {

@@ -70,4 +70,11 @@ class HomeController {
         render stockResult as GSON
 
     }
+
+	def priceQuoteScraped() {
+		def symbol = params.symbol ? params.symbol : 'goog';
+		def result = financeService.getStockResultScraped(symbol)
+
+		render result as GSON
+	}
 }
