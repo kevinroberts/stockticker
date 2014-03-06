@@ -9,7 +9,7 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
 //            $("#symbolToAdd").val('');
 //    });
 
-    var Stock = function (id, symbol, name, price, priceChange, percentChange) {
+    var Stock = function (id, symbol, name, price, priceChange, percentChange, lastUpdated) {
         var self = this;
         self.id = id;
         self.symbol = symbol;
@@ -17,6 +17,7 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
         self.price = price;
         self.priceChange = priceChange;
 		self.percentChange = percentChange;
+        self.lastUpdated = lastUpdated;
 
         self.formattedPrice = ko.computed(function() {
             var price = self.price;
@@ -90,7 +91,7 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
                         stockticker.utils.log("Service call contains errors...", stockData.error);
                         stockticker.utils.showAlertMessage(stockData.error.message);
                     } else {
-						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change, stockData.percentChange);
+						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change, stockData.percentChange, (new Date()).getTime());
 
 						var match = ko.utils.arrayFirst(self.stocks(), function(item) {
 							return stock.symbol === item.symbol;
@@ -110,6 +111,16 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
                 stockticker.utils.showAlertMessage("Invalid ticker symbol entered.");
             }
         }
+        var symbolSortToggle = false;
+        self.sortStocksBySymbol = function() {
+            if (!symbolSortToggle) {
+                self.stocks.sort(function(left, right) { return left.symbol == right.symbol ? 0 : (left.symbol < right.symbol ? -1 : 1) });
+                symbolSortToggle = true;
+            } else {
+                self.stocks.sort(function(left, right) { return left.symbol == right.symbol ? 0 : (left.symbol > right.symbol ? -1 : 1) });
+                symbolSortToggle = false;
+            }
+        }
 
 		self.updateStockTicker = function() {
 			// iterate through stock array and fetch updated information
@@ -122,15 +133,18 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
 							stockticker.utils.log("Service call contains errors...", stockData.error);
 							stockticker.utils.showAlertMessage(stockData.error.message);
 						} else {
-							item.name = stockData.name + " - " + (new Date()).getTime();
+							//item.name = stockData.name + " - " + (new Date()).getTime();
 							item.symbol = stockData.symbol;
 							item.price = stockData.price;
 							item.priceChange = stockData.change;
 							item.percentChange = stockData.percentChange;
+                            item.lastUpdated = (new Date()).getTime();
 						}
 					});
 				});
-
+                var data = self.stocks().slice(0);
+                self.stocks([]);
+                self.stocks(data);
 			}
 
 
