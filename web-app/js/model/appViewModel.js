@@ -54,6 +54,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 
         this.symbolToAdd = ko.observable("");
 
+
         this.stockSymbolIsValid = ko.computed(function() {
             return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^]{1,15}\s*$/) != null);
         }, this);

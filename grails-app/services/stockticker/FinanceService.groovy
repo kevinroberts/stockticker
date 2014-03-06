@@ -3,7 +3,7 @@ package stockticker
 import org.apache.commons.lang.StringEscapeUtils
 import org.codehaus.groovy.grails.web.json.JSONObject
 
-class YahooFinanceService {
+class FinanceService {
 
     /**
      * Returns JSON results from Yahoo's finance search webservice
@@ -36,7 +36,6 @@ class YahooFinanceService {
 
         return error
     }
-
 
 
 

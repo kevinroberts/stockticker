@@ -5,7 +5,7 @@ import grails.plugin.gson.converters.GSON
 
 class HomeController {
 
-    def yahooFinanceService
+    def financeService
 
     def index() {
     }
@@ -16,7 +16,7 @@ class HomeController {
         JSONObject result
         StockResult stockResult = new StockResult()
         try {
-            result = yahooFinanceService.getStockSymbolPriceResult(symbol)
+            result = financeService.getStockSymbolPriceResult(symbol)
 
             if (result) {
                 result = result.getJSONObject("query")
@@ -30,7 +30,7 @@ class HomeController {
 
                     if (!JSONObject.NULL.equals(symbolJson.get("ErrorIndicationreturnedforsymbolchangedinvalid"))) {
                         log.info("Could not find symbol -- " + noSymbol)
-                        stockResult.setError(yahooFinanceService.noResultsReturned(symbol))
+                        stockResult.setError(financeService.noResultsReturned(symbol))
                     } else {
                         stockResult.setSymbol(symbolJson.getString('Symbol'))
                         stockResult.setName(symbolJson.getString('Name'))
@@ -52,7 +52,7 @@ class HomeController {
 
                 } else {
                     log.debug("result not found for $symbol")
-                    stockResult.setError(yahooFinanceService.noResultsReturned(symbol))
+                    stockResult.setError(financeService.noResultsReturned(symbol))
                 }
             }
 

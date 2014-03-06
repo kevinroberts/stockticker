@@ -67,7 +67,7 @@
                                 <td><a href="#" data-bind="click: $root.removeStock, tooltip: {title: 'Remove ' + symbol}"><span class="glyphicon glyphicon-remove"></span></a></td>
                                 <td><span class="stock-symbol" data-bind="text: symbol">N/A</span></td>
                                 <td><span class="stock-name" data-bind="text: name">Name Pending</span>
-                                &nbsp;[ last updated <span class="stock-updated" data-bind="text: lastUpdated">Name Pending</span> ]
+                                &nbsp; - last updated <span class="stock-updated" data-bind="text: lastUpdated">Name Pending</span>
                                 </td>
                                 <td>
                                     <span class="stock-price" data-bind="text: formattedPrice">-</span>
