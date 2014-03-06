@@ -105,7 +105,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        NYSE
+                                        <a href="https://nyse.nyx.com/" target="_blank">NYSE</a>
                                     </td>
                                     <td>
                                         New York Stock Exchange
@@ -116,7 +116,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        TSE
+                                        <a href="http://www.tse.or.jp/english/" target="_blank">TSE</a>
                                     </td>
                                     <td>
                                         Tokyo Stock Exchange
@@ -128,7 +128,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        LSE
+                                        <a href="http://www.londonstockexchange.com/home/homepage.htm">LSE</a>
                                     </td>
                                     <td>
                                         London Stock Exchange
@@ -139,7 +139,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        HKE
+                                        <a href="https://www.hkex.com.hk/eng/index.htm">HKE</a>
                                     </td>
                                     <td>
                                         Hong Kong Stock Exchange
@@ -150,7 +150,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        NSE
+                                        <a href="http://www.nseindia.com/">NSE</a>
                                     </td>
                                     <td>
                                         National Stock Exchange of India
@@ -161,7 +161,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        BM&amp;F BOVESPA
+                                        <a href="http://www.bmfbovespa.com.br/en-us/home.aspx?idioma=en-us">BM&amp;F BOVESPA</a>
                                     </td>
                                     <td>
                                         Bolsa de Valores, Mercadorias &amp; Futuros de Sao Paulo
@@ -172,7 +172,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        ASX
+                                        <a href="http://www.asx.com.au/">ASX</a>
                                     </td>
                                     <td>
                                         Australian Securities Exchange
@@ -183,7 +183,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        FWB
+                                        <a href="http://boerse-frankfurt.com/en/start">FWB</a>
                                     </td>
                                     <td>
                                         Frankfurt Stock Exchange -<br>
@@ -195,7 +195,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        RTS
+                                        <a href="http://moex.com/en/">RTS</a>
                                     </td>
                                     <td>
                                         Russian Trading System
@@ -206,7 +206,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        JSE
+                                        <a href="https://www.jse.co.za/Home.aspx">JSE</a>
                                     </td>
                                     <td>
                                         Johannesburg Stock Exchange
@@ -217,7 +217,7 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        DIFX
+                                        <a href="http://www.nasdaqdubai.com/">DIFX</a>
                                     </td>
                                     <td>
                                         Dubai International Financial Exchange- now NASDAQ Dubai
