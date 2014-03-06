@@ -14,6 +14,7 @@ requirejs.config({
         "appViewModel" : "../model/appViewModel",
         "blockui" : "../lib/jquery.blockUI",
 		"knockout-bootstrap" : "../lib/knockout-bootstrap",
+        "moment": "../lib/moment-with-langs.min",
 		"utils" : "../app/utils"
     },
     "shim": {

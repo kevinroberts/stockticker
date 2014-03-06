@@ -1,5 +1,5 @@
 // Main viewmodel class
-define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, stockticker) {
+define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, stockticker, moment) {
 
     // Document wide AJAX loading screen
 //    $(document).ajaxStart(function() {
@@ -91,7 +91,7 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
                         stockticker.utils.log("Service call contains errors...", stockData.error);
                         stockticker.utils.showAlertMessage(stockData.error.message);
                     } else {
-						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change, stockData.percentChange, (new Date()).getTime());
+						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change, stockData.percentChange, moment().format("h:mm:ss a"));
 
 						var match = ko.utils.arrayFirst(self.stocks(), function(item) {
 							return stock.symbol === item.symbol;
@@ -131,14 +131,13 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
 					$.getJSON(window.location.href.split('?')[0] + "symbol/" + item.symbol, function(stockData) {
 						if (stockData.error && stockData.error.code) {
 							stockticker.utils.log("Service call contains errors...", stockData.error);
-							stockticker.utils.showAlertMessage(stockData.error.message);
 						} else {
 							//item.name = stockData.name + " - " + (new Date()).getTime();
 							item.symbol = stockData.symbol;
 							item.price = stockData.price;
 							item.priceChange = stockData.change;
 							item.percentChange = stockData.percentChange;
-                            item.lastUpdated = (new Date()).getTime();
+                            item.lastUpdated = moment().format("h:mm:ss a");
 						}
 					});
 				});
