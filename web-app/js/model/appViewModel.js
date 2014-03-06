@@ -142,6 +142,7 @@ define(['knockout', 'bootbox', 'utils', 'blockui', 'knockout-bootstrap'], functi
 						}
 					});
 				});
+                // force refresh the stock arrays
                 var data = self.stocks().slice(0);
                 self.stocks([]);
                 self.stocks(data);
