@@ -59,7 +59,7 @@
                                 <tr>
                                     <th>&nbsp;</th>
                                     <th><a href="#"><span class="glyphicon glyphicon-sort" data-bind="click: $root.sortStocksBySymbol, tooltip: {title: 'Sort by name'}"></span></a> Stock Symbol</th>
-                                    <th>Name</th>
+                                    <th>Name&nbsp; <span class="stock-updated" data-bind="text: lastUpdate()"></span></th>
                                     <th>Price</th>
                                     <th>Change</th>
                                 </tr>
@@ -68,11 +68,9 @@
                                 <tr data-bind="attr: { id: id }">
                                     <td><a href="#" data-bind="click: $root.removeStock, tooltip: {title: 'Remove ' + symbol}"><span class="glyphicon glyphicon-remove"></span></a></td>
                                     <td><span class="stock-symbol" data-bind="text: symbol">N/A</span></td>
-                                    <td><span class="stock-name" data-bind="text: name">Name Pending</span>
-                                        &nbsp; - last updated <span class="stock-updated" data-bind="text: lastUpdated">Name Pending</span>
-                                    </td>
+                                    <td><span class="stock-name" data-bind="text: name">Name Pending</span></td>
                                     <td>
-                                        <span class="stock-price" data-bind="text: formattedPrice">-</span>
+                                        <span class="stock-price" data-bind="text: formattedPrice, css: { 'alert-success': price() > prevPrice(), 'alert-danger': price() < prevPrice() }">-</span>
                                     </td>
                                     <td>
                                         <span class="stock-price-change" data-bind="text: formattedPriceChange, css: { 'alert-success': priceChange() > 0, 'alert-danger': priceChange() < 0 }">+0.00 (0.00%)</span>

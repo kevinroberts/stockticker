@@ -9,12 +9,13 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 //            $("#symbolToAdd").val('');
 //    });
 
-    var Stock = function (id, symbol, name, price, priceChange, percentChange, lastUpdated) {
+    var Stock = function (id, symbol, name, price, prevPrice, priceChange, percentChange, lastUpdated) {
         var self = this;
         self.id = id;
         self.symbol = symbol;
         self.name = name;
         self.price = ko.observable(price);
+		self.prevPrice = ko.observable(prevPrice);
         self.priceChange = ko.observable(priceChange);
 		self.percentChange = ko.observable(percentChange);
         self.lastUpdated = lastUpdated;
@@ -92,7 +93,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
                         stockticker.utils.log("Service call contains errors...", stockData.error);
                         stockticker.utils.showAlertMessage(stockData.error.message);
                     } else {
-						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.change, stockData.percentChange, moment().format("h:mm:ss a"));
+						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.price, stockData.change, stockData.percentChange, moment().format("lll"));
 
 						var match = ko.utils.arrayFirst(self.stocks(), function(item) {
 							return stock.symbol === item.symbol;
@@ -123,6 +124,14 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
             }
         }
 
+		self.lastUpdate = ko.computed(function() {
+			if (self.stocks().length > 0) {
+				return " - last updated " + moment().format("h:mm:ss a");
+			} else {
+				return '';
+			}
+		}, this);
+
 		self.updateStockTicker = function() {
 			// iterate through stock array and fetch updated information
 			stockticker.utils.log("updating stock tickers - " + (new Date()).getTime());
@@ -136,10 +145,12 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 							//item.name = stockData.name + " - " + (new Date()).getTime();
 							stockticker.utils.log("Updated stock info", stockData);
 							item.symbol = stockData.symbol;
+							item.prevPrice(item.price());
 							item.price(stockData.price);
 							item.priceChange(stockData.change);
 							item.percentChange(stockData.percentChange);
-                            item.lastUpdated = moment().format("h:mm:ss a");
+                            item.lastUpdated = moment().format("lll");
+							stockticker.utils.log("Updated stock prices - old: " + item.prevPrice() + " / new: " + item.price());
 							var data = self.stocks().slice(0);
 							self.stocks([]);
 							self.stocks(data);
