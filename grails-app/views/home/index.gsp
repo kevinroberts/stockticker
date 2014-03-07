@@ -75,7 +75,7 @@
                                         <span class="stock-price" data-bind="text: formattedPrice">-</span>
                                     </td>
                                     <td>
-                                        <span class="stock-price-change" data-bind="text: formattedPriceChange, css: { 'alert-success': priceChange > 0, 'alert-danger': priceChange < 0 }">+0.00 (0.00%)</span>
+                                        <span class="stock-price-change" data-bind="text: formattedPriceChange, css: { 'alert-success': priceChange() > 0, 'alert-danger': priceChange() < 0 }">+0.00 (0.00%)</span>
                                     </td>
                                 </tr>
                                 </tbody>

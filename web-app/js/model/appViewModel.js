@@ -14,21 +14,21 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
         self.id = id;
         self.symbol = symbol;
         self.name = name;
-        self.price = price;
-        self.priceChange = priceChange;
-		self.percentChange = percentChange;
+        self.price = ko.observable(price);
+        self.priceChange = ko.observable(priceChange);
+		self.percentChange = ko.observable(percentChange);
         self.lastUpdated = lastUpdated;
 
         self.formattedPrice = ko.computed(function() {
-            var price = self.price;
+            var price = self.price();
             var str = price ? "$" + price.toFixed(2) : "N/A";
 
             return str;
         });
 
         self.formattedPriceChange = ko.computed(function() {
-            var newPrice = self.price;
-            var priceChange = self.priceChange;
+            var newPrice = self.price();
+            var priceChange = self.priceChange();
             var oldPrice = newPrice - priceChange;
             var percentChange = (newPrice / oldPrice) * 100;
 
@@ -39,7 +39,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
                 positiveSign = '+';
             }
 			// use pre-formatted percent change provided by webservice call
-            var str = percentChange ? positiveSign + priceChange + " (" + self.percentChange + ")" : "N/A";
+            var str = percentChange ? positiveSign + priceChange + " (" + self.percentChange() + ")" : "N/A";
 
             return str;
         });
@@ -134,18 +134,21 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 							stockticker.utils.log("Service call contains errors...", stockData.error);
 						} else {
 							//item.name = stockData.name + " - " + (new Date()).getTime();
+							stockticker.utils.log("Updated stock info", stockData);
 							item.symbol = stockData.symbol;
-							item.price = stockData.price;
-							item.priceChange = stockData.change;
-							item.percentChange = stockData.percentChange;
+							item.price(stockData.price);
+							item.priceChange(stockData.change);
+							item.percentChange(stockData.percentChange);
                             item.lastUpdated = moment().format("h:mm:ss a");
+							stockticker.utils.log("Updated stock ref", item);
+							var data = self.stocks().slice(0);
+							self.stocks([]);
+							self.stocks(data);
 						}
 					});
 				});
                 // force refresh the stock arrays
-                var data = self.stocks().slice(0);
-                self.stocks([]);
-                self.stocks(data);
+
 			}
 
 
