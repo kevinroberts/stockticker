@@ -12,7 +12,7 @@
 <body>
 <div class="container">
     <div class="row clearfix">
-        <div class="col-md-12 column">
+        <div class="col-lg-12 column">
             <div class="page-header">
                 <h1>Stockticker <span>v. <%=grailsApplication.metadata['app.version']%> a knockout require js app</span></h1>
             </div>
@@ -24,7 +24,7 @@
             </div>
 
             <div class="row clearfix">
-                <div class="col-md-8 column">
+                <div class="col-lg-8 column">
 
                     <div class="action-group">
                         <form class="form-inline" role="form">
@@ -85,7 +85,7 @@
                     </div>
 
                 </div>
-                <div class="col-md-4 column">
+                <div class="col-lg-4 column">
                     <div style="margin-top: 55px;" class="panel panel-info">
                         <div class="panel-heading">
                             <h3 class="panel-title">
@@ -105,13 +105,13 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <a href="https://nyse.nyx.com/" target="_blank">NYSE</a>
+                                        <a href="https://nyse.nyx.com/" target="_blank">NYSE</a> / <a href="http://www.nasdaq.com/">NASDAQ</a>
                                     </td>
                                     <td>
                                         New York Stock Exchange
                                     </td>
                                     <td>
-                                        09:30a-04:00pm
+                                        09:30a-04:00pm EST
                                     </td>
                                 </tr>
                                 <tr>
@@ -123,7 +123,7 @@
                                     </td>
                                     <td>
                                         09:00a-11:00am<br>
-                                        12:30p-03:00pm
+                                        12:30p-03:00pm JST
                                     </td>
                                 </tr>
                                 <tr>
@@ -134,7 +134,18 @@
                                         London Stock Exchange
                                     </td>
                                     <td>
-                                        08:00a-04:30pm
+                                        08:00a-04:30pm GMT
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <a href="http://www.euronext.com/" target="_blank">Euronext</a>
+                                    </td>
+                                    <td>
+                                        Euronext N.V.
+                                    </td>
+                                    <td>
+                                        09:00a-05:30pm CET
                                     </td>
                                 </tr>
                                 <tr>
@@ -145,7 +156,7 @@
                                         Hong Kong Stock Exchange
                                     </td>
                                     <td>
-                                        09:30a-04:00pm
+                                        09:30a-04:00pm HKT
                                     </td>
                                 </tr>
                                 <tr>
@@ -156,7 +167,7 @@
                                         National Stock Exchange of India
                                     </td>
                                     <td>
-                                        09:00a-03:30pm
+                                        09:00a-03:30pm IST
                                     </td>
                                 </tr>
                                 <tr>
@@ -167,7 +178,7 @@
                                         Bolsa de Valores, Mercadorias &amp; Futuros de Sao Paulo
                                     </td>
                                     <td>
-                                        10:00a-05:00pm
+                                        10:00a-05:00pm BRT
                                     </td>
                                 </tr>
                                 <tr>
@@ -178,7 +189,7 @@
                                         Australian Securities Exchange
                                     </td>
                                     <td>
-                                        10:00a-04:00pm
+                                        10:00a-04:00pm AEST
                                     </td>
                                 </tr>
                                 <tr>
