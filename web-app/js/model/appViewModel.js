@@ -140,14 +140,12 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 							item.priceChange(stockData.change);
 							item.percentChange(stockData.percentChange);
                             item.lastUpdated = moment().format("h:mm:ss a");
-							stockticker.utils.log("Updated stock ref", item);
 							var data = self.stocks().slice(0);
 							self.stocks([]);
 							self.stocks(data);
 						}
 					});
 				});
-                // force refresh the stock arrays
 
 			}
 
