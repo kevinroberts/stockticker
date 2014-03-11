@@ -8,6 +8,14 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 //            $.unblockUI();
 //            $("#symbolToAdd").val('');
 //    });
+// custom fade in animation binding
+//	ko.bindingHandlers.fadeInText = {
+//		update: function(element, valueAccessor) {
+//			$(element).hide();
+//			ko.bindingHandlers.text.update(element, valueAccessor);
+//			$(element).fadeIn();
+//		}
+//	};
 
     var Stock = function (id, symbol, name, price, prevPrice, priceChange, percentChange, lastUpdated) {
         var self = this;
@@ -57,6 +65,8 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
         self.stocks = ko.observableArray([]);
 
         this.symbolToAdd = ko.observable("");
+
+		this.autoUpdate = ko.observable(true);
 
 
         this.stockSymbolIsValid = ko.computed(function() {
@@ -135,9 +145,24 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 			}
 		}, this);
 
+		self.toggleAutoUpdate = function() {
+			if (this.autoUpdate()) {
+				stockticker.utils.log("stopping auto update - " + moment().format("h:mm:ss a"));
+				clearInterval(stockticker.utils.stockInterval);
+				this.autoUpdate(false);
+				return true;
+			} else {
+				stockticker.utils.log("starting auto update - " + moment().format("h:mm:ss a"));
+				stockticker.utils.stockInterval = setInterval(this.updateStockTicker, 6000);
+				this.autoUpdate(true);
+				return true;
+			}
+
+		}
+
 		self.updateStockTicker = function() {
 			// iterate through stock array and fetch updated ticker information
-			stockticker.utils.log("updating stock tickers - " + (new Date()).getTime());
+			stockticker.utils.log("updating stock tickers - " + moment().format("h:mm:ss a"));
 			if (self.stocks().length > 0) {
 				ko.utils.arrayForEach(self.stocks(), function(item) {
 					console.log("updating: " + item.symbol);

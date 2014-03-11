@@ -15,6 +15,7 @@ requirejs.config({
         "blockui" : "../lib/jquery.blockUI",
 		"knockout-bootstrap" : "../lib/knockout-bootstrap",
         "moment": "../lib/moment-with-langs.min",
+		"bootstrap-switch": "../lib/bootstrap-switch",
 		"utils" : "../app/utils"
     },
     "shim": {
@@ -28,6 +29,9 @@ requirejs.config({
             // jQuery
             deps: ["jquery"]
         },
+		"bootstrap-switch": {
+			deps: ["jquery"]
+		},
         "bootbox": {
             deps: ["jquery", "jquery.bootstrap"],
             exports: "bootbox"

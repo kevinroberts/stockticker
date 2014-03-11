@@ -58,7 +58,9 @@
 
                     <div class="list-group stockTickerList">
                         <a href="#" class="list-group-item active headerRow">
-                            &nbsp;
+								<label>
+									<input id="intervalUpdateToggle" type="checkbox" data-bind="click: toggleAutoUpdate, checked: autoUpdate "> auto-update
+								</label>
                         </a>
                         <div class="list-group-item">
                             <table id="stockTickerTable" class="table table-striped sorted_table">
