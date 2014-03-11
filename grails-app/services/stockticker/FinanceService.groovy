@@ -73,7 +73,7 @@ class FinanceService {
 				stockResult.setError(this.noResultsReturned(stockSymbol))
 			}
 		} catch (Exception e) {
-			log.error("Exception reached trying to parse stock quote", e)
+			log.error("Exception reached trying to parse stock quote - url: " + "http://uk.advfn.com/p.php?pid=qkquote&btn=&epic=$stockSymbol&symbol=", e)
 			stockResult.setError(this.noResultsReturned(stockSymbol))
 		}
 
