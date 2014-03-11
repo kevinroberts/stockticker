@@ -50,6 +50,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
     return function appViewModel() {
         var self = this;
 
+		// grab the AJAX url endpoint from server-side html
 		var serviceUrl = $("#stockServiceUrl").val().replace(/SYMBOL/g, '');
 
         // initial data
@@ -135,7 +136,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 		}, this);
 
 		self.updateStockTicker = function() {
-			// iterate through stock array and fetch updated information
+			// iterate through stock array and fetch updated ticker information
 			stockticker.utils.log("updating stock tickers - " + (new Date()).getTime());
 			if (self.stocks().length > 0) {
 				ko.utils.arrayForEach(self.stocks(), function(item) {
@@ -144,8 +145,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 						if (stockData.error && stockData.error.code) {
 							stockticker.utils.log("Service call contains errors...", stockData.error);
 						} else {
-							//item.name = stockData.name + " - " + (new Date()).getTime();
-							stockticker.utils.log("Updated stock info", stockData);
+							stockticker.utils.log("Updated stock info from service call", stockData);
 							item.symbol = stockData.symbol;
 							item.prevPrice(item.price());
 							item.price(stockData.price);
@@ -156,6 +156,12 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 							var data = self.stocks().slice(0);
 							self.stocks([]);
 							self.stocks(data);
+							// remove any color change for price change after short delay
+							if (item.priceChange() > 0) {
+								$("#" + item.id + " .stock-price").delay(1000).removeClass('alert-success');
+							} else if (item.priceChange() < 0) {
+								$("#" + item.id + " .stock-price").delay(1000).removeClass('alert-danger');
+							}
 						}
 					});
 				});

@@ -5,6 +5,8 @@ define(function () {
 	var stockticker = stockticker || {};
 	stockticker.utils = stockticker.utils || {};
 
+	stockticker.utils.stockInterval = null;
+
 	stockticker.utils.countChar = function (val, length) {
 		var len = val.value.length;
 		if (len >= length) {

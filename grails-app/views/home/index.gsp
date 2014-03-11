@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="hidden">
-    %{--server-side variable for re-use--}%
+    %{--server-side variables for injected re-use in Javascript--}%
 	<form>
     	<input type="hidden" name="stockServiceUrl" id="stockServiceUrl" value="${createLink(mapping: 'symbolScraped', params: [symbol : 'SYMBOL'])}">
     	<input type="hidden" name="loadingImageSrc" id="loadingImageSrc" value="${resource(dir: 'images', file: 'spinner.gif')}">
