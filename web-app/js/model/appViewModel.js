@@ -157,7 +157,6 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 				this.autoUpdate(true);
 				return true;
 			}
-
 		}
 
 		self.updateStockTicker = function() {
@@ -182,10 +181,13 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 							self.stocks([]);
 							self.stocks(data);
 							// remove any color change for price change after short delay
-							if (item.priceChange() > 0) {
-								$("#" + item.id + " .stock-price").delay(1000).removeClass('alert-success');
-							} else if (item.priceChange() < 0) {
-								$("#" + item.id + " .stock-price").delay(1000).removeClass('alert-danger');
+							var priceChange = item.price() - item.prevPrice();
+							if (priceChange > 0) {
+								stockticker.utils.log("price has increased :" + priceChange);
+								//$("#" + item.id + " .stock-price").delay(1000).removeClass('alert-success');
+							} else if (priceChange < 0) {
+								stockticker.utils.log("price has gone down :" + priceChange);
+								//$("#" + item.id + " .stock-price").delay(1000).removeClass('alert-danger');
 							}
 						}
 					});
