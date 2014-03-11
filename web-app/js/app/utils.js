@@ -48,8 +48,9 @@ define(function () {
 	}
 
 	stockticker.utils.showStockLoadingMessage = function(message) {
-		$('.stockTickerList').block({
-			message: '<h3> <img src="' + window.location.href.split('?')[0] + 'images/spinner.gif" /> ' + message + '</h3>',
+		var imgSrc = $("#loadingImageSrc").val();
+        $('.stockTickerList').block({
+			message: '<h3> <img src="' + imgSrc + '" /> ' + message + '</h3>',
 			css: { border: '2px solid #a00' }
 		});
 	}

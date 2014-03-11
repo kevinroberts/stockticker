@@ -10,6 +10,13 @@
     <title>Stock Ticker Knockout!</title>
 </head>
 <body>
+<div class="hidden">
+    %{--server-side variable for re-use--}%
+	<form>
+    	<input type="hidden" name="stockServiceUrl" id="stockServiceUrl" value="${createLink(mapping: 'symbolScraped', params: [symbol : 'SYMBOL'])}">
+    	<input type="hidden" name="loadingImageSrc" id="loadingImageSrc" value="${resource(dir: 'images', file: 'spinner.gif')}">
+	</form>
+</div>
 <div class="container">
     <div class="row clearfix">
         <div class="col-lg-12 column">

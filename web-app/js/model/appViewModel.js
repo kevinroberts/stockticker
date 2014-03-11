@@ -50,6 +50,8 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
     return function appViewModel() {
         var self = this;
 
+		var serviceUrl = $("#stockServiceUrl").val().replace(/SYMBOL/g, '');
+
         // initial data
         self.stocks = ko.observableArray([]);
 
@@ -87,7 +89,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
             if (this.symbolToAdd() && this.stockSymbolIsValid()) {
                 var symbol = encodeURI(this.symbolToAdd());
 				stockticker.utils.showStockLoadingMessage("Loading...");
-                $.getJSON(window.location.href.split('?')[0] + "symbolScraped/" + symbol, function(stockData) {
+                $.getJSON(serviceUrl + symbol, function(stockData) {
 					$('.stockTickerList').unblock();
 					if (stockData.error && stockData.error.code) {
                         stockticker.utils.log("Service call contains errors...", stockData.error);
@@ -138,7 +140,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 			if (self.stocks().length > 0) {
 				ko.utils.arrayForEach(self.stocks(), function(item) {
 					console.log("updating: " + item.symbol);
-					$.getJSON(window.location.href.split('?')[0] + "symbolScraped/" + item.symbol, function(stockData) {
+					$.getJSON(serviceUrl + item.symbol, function(stockData) {
 						if (stockData.error && stockData.error.code) {
 							stockticker.utils.log("Service call contains errors...", stockData.error);
 						} else {
