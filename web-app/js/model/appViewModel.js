@@ -184,10 +184,19 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 							var priceChange = item.price() - item.prevPrice();
 							if (priceChange > 0) {
 								stockticker.utils.log("price has increased :" + priceChange);
-								//$("#" + item.id + " .stock-price").delay(1000).removeClass('alert-success');
+								$("#" + item.id + " .stock-price").removeClass('alert-danger');
+								$("#" + item.id + " .stock-price").addClass('alert-success').delay(1500).queue(function(nxt) {
+									$(this).removeClass("alert-success");
+									nxt();
+								});
+
 							} else if (priceChange < 0) {
 								stockticker.utils.log("price has gone down :" + priceChange);
-								//$("#" + item.id + " .stock-price").delay(1000).removeClass('alert-danger');
+								$("#" + item.id + " .stock-price").removeClass('alert-success');
+								$("#" + item.id + " .stock-price").addClass('alert-danger').delay(1500).queue(function(dng) {
+									$(this).removeClass("alert-danger");
+									dng();
+								});
 							}
 						}
 					});

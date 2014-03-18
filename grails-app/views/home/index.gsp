@@ -37,7 +37,7 @@
                         <form class="form-inline" role="form">
                             <div class="form-group" data-bind=" css: { 'has-error': !stockSymbolIsValid() }">
                                 <label class="sr-only" for="symbolToAdd">Enter Stock Symbol</label>
-                                <input id="symbolToAdd" type="text" class="form-control" data-bind="value: symbolToAdd, valueUpdate: 'keyup'" placeholder="Stock Symbol" />
+                                <input id="symbolToAdd" type="text" class="form-control" data-bind="value: symbolToAdd, valueUpdate: 'keyup'" placeholder="Stock Symbol" autofocus="" />
                             </div>
 
                             <div class="form-group">
@@ -79,7 +79,7 @@
                                     <td><span class="stock-symbol" data-bind="text: symbol">N/A</span></td>
                                     <td><span class="stock-name" data-bind="text: name">Name Pending</span></td>
                                     <td>
-                                        <span class="stock-price" data-bind="text: formattedPrice, css: { 'alert-success': price() > prevPrice(), 'alert-danger': price() < prevPrice() }">-</span>
+                                        <span class="stock-price" data-bind="text: formattedPrice ">-</span>
                                     </td>
                                     <td>
                                         <span class="stock-price-change" data-bind="text: formattedPriceChange, css: { 'alert-success': priceChange() > 0, 'alert-danger': priceChange() < 0 }">+0.00 (0.00%)</span>
