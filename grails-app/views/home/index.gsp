@@ -14,6 +14,7 @@
     %{--server-side variables for injected re-use in Javascript--}%
 	<form>
     	<input type="hidden" name="stockServiceUrl" id="stockServiceUrl" value="${createLink(mapping: 'symbolScraped', params: [symbol : 'SYMBOL'])}">
+		<input type="hidden" name="stockFetchUrl" id="stockFetchUrl" value="${createLink(controller: 'home', action: 'symbolLookup')}">
     	<input type="hidden" name="loadingImageSrc" id="loadingImageSrc" value="${resource(dir: 'images', file: 'spinner.gif')}">
 	</form>
 </div>
@@ -37,7 +38,7 @@
                         <form class="form-inline" role="form">
                             <div class="form-group" data-bind=" css: { 'has-error': !stockSymbolIsValid() }">
                                 <label class="sr-only" for="symbolToAdd">Enter Stock Symbol</label>
-                                <input id="symbolToAdd" type="text" class="form-control" data-bind="value: symbolToAdd, valueUpdate: 'keyup'" placeholder="Stock Symbol" autofocus="" />
+                                <input id="symbolToAdd" type="text" class="form-control" data-bind="value: symbolToAdd, valueUpdate: 'keyup'" placeholder="Stock Symbol" autofocus="" autocomplete="off" />
                             </div>
 
                             <div class="form-group">

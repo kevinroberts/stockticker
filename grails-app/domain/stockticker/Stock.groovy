@@ -20,4 +20,6 @@ class Stock {
 		symbol(nullable: false, blank: false, unique: true)
 		name(nullable: true)
     }
+
+    String toString(){name}
 }

@@ -77,4 +77,20 @@ class HomeController {
 
 		render result as GSON
 	}
+
+    def symbolLookup() {
+        def symbol = params.symbol ? params.symbol : '';
+        List<Stock> stocks;
+        if (symbol && symbol.trim() != '') {
+            stocks = Stock.findAllBySymbolIlike("%" + symbol + "%");
+        } else {
+            stocks = Stock.all
+        }
+
+
+        render stocks as GSON
+    }
+
+
+
 }

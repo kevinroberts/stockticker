@@ -16,6 +16,8 @@ requirejs.config({
 		"knockout-bootstrap" : "../lib/knockout-bootstrap",
         "moment": "../lib/moment-with-langs.min",
 		"bootstrap-switch": "../lib/bootstrap-switch",
+		"typeahead": "../lib/typeahead.bundle",
+		"handlebars" : "../lib/handlebars-v1.3.0",
 		"utils" : "../app/utils"
     },
     "shim": {
@@ -29,6 +31,9 @@ requirejs.config({
             // jQuery
             deps: ["jquery"]
         },
+		"typeahead": {
+			deps: ["jquery", "jquery.bootstrap"]
+		},
 		"bootstrap-switch": {
 			deps: ["jquery"]
 		},
