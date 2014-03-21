@@ -1,9 +1,9 @@
-define(["jquery", "utils", "handlebars", "typeahead" ,"jquery.bootstrap", "bootstrap-switch"], function($, stockticker) {
+define(["jquery", "utils", "handlebars", "typeahead" ,"jquery.bootstrap", "bootstrap-switch"], function($, utils) {
     //load the necessary jquery / bootstrap plugins.
     $(function() {
 		// test that jQuery has loaded
         if (typeof console == "object") {
-			stockticker.utils.log("jquery is loaded: version " + $.fn.jquery);
+			utils.log("jquery is loaded: version " + $.fn.jquery);
         }
 //		$("#intervalUpdateToggle").bootstrapSwitch('size', 'small');
 //		$('#intervalUpdateToggle').on('switchChange', function (e, data) {

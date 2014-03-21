@@ -1,13 +1,6 @@
 // Main viewmodel class
-define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, stockticker, moment) {
+define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment) {
 
-    // Document wide AJAX loading screen
-//    $(document).ajaxStart(function() {
-//            stockticker.utils.showLoadingMessage("Loading stock information...");
-//    }).ajaxComplete(function() {
-//            $.unblockUI();
-//            $("#symbolToAdd").val('');
-//    });
 // custom fade in animation binding
 //	ko.bindingHandlers.fadeInText = {
 //		update: function(element, valueAccessor) {
@@ -88,9 +81,9 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
         self.removeBySymbol = function() {
             bootbox.prompt("Enter Stock Symbol: ", function(result) {
                 if (result === null) {
-                    stockticker.utils.log("Stock symbol not entered in bootbox dialog");
+                    utils.log("Stock symbol not entered in bootbox dialog");
                 } else {
-                    stockticker.utils.log("removing stock - " + result);
+                    utils.log("removing stock - " + result);
                     self.stocks.remove(function(item) { return item.symbol == result })
                 }
             });
@@ -99,14 +92,14 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
         self.addStock = function() {
             if (this.symbolToAdd() && this.stockSymbolIsValid()) {
                 var symbol = encodeURI(this.symbolToAdd());
-				stockticker.utils.showStockLoadingMessage("Loading...");
+				utils.showStockLoadingMessage("Loading...");
                 $.getJSON(serviceUrl + symbol, function(stockData) {
 					$('.stockTickerList').unblock();
 					if (stockData.error && stockData.error.code) {
-                        stockticker.utils.log("Service call contains errors...", stockData.error);
-                        stockticker.utils.showAlertMessage(stockData.error.message);
+                        utils.log("Service call contains errors...", stockData.error);
+                        utils.showAlertMessage(stockData.error.message);
                     } else {
-						var stock = new Stock(stockticker.utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.price, stockData.change, stockData.percentChange, moment().format("lll"));
+						var stock = new Stock(utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.price, stockData.change, stockData.percentChange, moment().format("lll"));
 
 						var match = ko.utils.arrayFirst(self.stocks(), function(item) {
 							return stock.symbol === item.symbol;
@@ -114,16 +107,16 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 
 						// validate that the entered symbol is new
 						if (!match) {
-							stockticker.utils.log('adding new stock: ', stock);
+							utils.log('adding new stock: ', stock);
 							self.stocks.push(stock);
 							self.symbolToAdd(''); // clear the entered symbol for next input
 						} else {
-							stockticker.utils.showAlertMessage("Symbol is already entered.");
+							utils.showAlertMessage("Symbol is already entered.");
 						}
                     }
                 });
             } else {
-                stockticker.utils.showAlertMessage("Invalid ticker symbol entered.");
+                utils.showAlertMessage("Invalid ticker symbol entered.");
             }
         }
         var symbolSortToggle = false;
@@ -147,13 +140,13 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 
 		self.toggleAutoUpdate = function() {
 			if (this.autoUpdate()) {
-				stockticker.utils.log("stopping auto update - " + moment().format("h:mm:ss a"));
-				clearInterval(stockticker.utils.stockInterval);
+				utils.log("stopping auto update - " + moment().format("h:mm:ss a"));
+				clearInterval(utils.getStockInterval());
 				this.autoUpdate(false);
 				return true;
 			} else {
-				stockticker.utils.log("starting auto update - " + moment().format("h:mm:ss a"));
-				stockticker.utils.stockInterval = setInterval(this.updateStockTicker, 6000);
+				utils.log("starting auto update - " + moment().format("h:mm:ss a"));
+				utils.setStockInterval(setInterval(this.updateStockTicker, 6000));
 				this.autoUpdate(true);
 				return true;
 			}
@@ -161,29 +154,29 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 
 		self.updateStockTicker = function() {
 			// iterate through stock array and fetch updated ticker information
-			stockticker.utils.log("updating stock tickers - " + moment().format("h:mm:ss a"));
+			utils.log("updating stock tickers - " + moment().format("h:mm:ss a"));
 			if (self.stocks().length > 0) {
 				ko.utils.arrayForEach(self.stocks(), function(item) {
-					console.log("updating: " + item.symbol);
+					utils.log("updating: " + item.symbol);
 					$.getJSON(serviceUrl + item.symbol, function(stockData) {
 						if (stockData.error && stockData.error.code) {
-							stockticker.utils.log("Service call contains errors...", stockData.error);
+							utils.log("Service call contains errors...", stockData.error);
 						} else {
-							stockticker.utils.log("Updated stock info from service call", stockData);
+							utils.log("Updated stock info from service call", stockData);
 							item.symbol = stockData.symbol;
 							item.prevPrice(item.price());
 							item.price(stockData.price);
 							item.priceChange(stockData.change);
 							item.percentChange(stockData.percentChange);
                             item.lastUpdated = moment().format("lll");
-							stockticker.utils.log("Updated stock prices - old: " + item.prevPrice() + " / new: " + item.price());
+							utils.log("Updated stock prices - old: " + item.prevPrice() + " / new: " + item.price());
 							var data = self.stocks().slice(0);
 							self.stocks([]);
 							self.stocks(data);
 							// remove any color change for price change after short delay
 							var priceChange = item.price() - item.prevPrice();
 							if (priceChange > 0) {
-								stockticker.utils.log("price has increased :" + priceChange);
+								utils.log("price has increased :" + priceChange);
 								$("#" + item.id + " .stock-price").removeClass('alert-danger');
 								$("#" + item.id + " .stock-price").addClass('alert-success').delay(1500).queue(function(nxt) {
 									$(this).removeClass("alert-success");
@@ -191,7 +184,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 								});
 
 							} else if (priceChange < 0) {
-								stockticker.utils.log("price has gone down :" + priceChange);
+								utils.log("price has gone down :" + priceChange);
 								$("#" + item.id + " .stock-price").removeClass('alert-success');
 								$("#" + item.id + " .stock-price").addClass('alert-danger').delay(1500).queue(function(dng) {
 									$(this).removeClass("alert-danger");
