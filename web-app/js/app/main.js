@@ -2,7 +2,7 @@ define(["jquery", "utils", "handlebars", "typeahead" ,"jquery.bootstrap", "boots
     //load the necessary jquery / bootstrap plugins.
     $(function() {
 		// test that jQuery has loaded
-        if (typeof console == "object") {
+        if (typeof jQuery == "function") {
 			utils.log("jquery is loaded: version " + $.fn.jquery);
         }
 //		$("#intervalUpdateToggle").bootstrapSwitch('size', 'small');
