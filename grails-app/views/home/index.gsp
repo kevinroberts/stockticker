@@ -56,14 +56,26 @@
                             </div>
 							<div class="form-group pull-right">
 
-								<select class="form-control saved-stocks">
+								<select id="favoriteList" class="form-control saved-stocks">
 									<option>Tech Stocks</option>
 									<option>2</option>
 									<option>3</option>
 									<option>4</option>
 									<option>5</option>
 								</select>
-								<button class="btn btn-default">Load List <span class="glyphicon glyphicon-log-in"></span> </button>
+
+								<div class="btn-group">
+									<button class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span> Load List</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="#" data-bind="">Edit list name</a>
+										</li>
+										<li>
+											<a href="#">Remove list</a>
+										</li>
+									</ul>
+								</div>
+
 							</div>
                         </form>
 
@@ -88,7 +100,9 @@
                                 </thead>
                                 <tbody data-bind="foreach: stocks">
                                 <tr data-bind="attr: { id: id }">
-                                    <td><a href="#" data-bind="click: $root.removeStock, tooltip: {title: 'Remove ' + symbol}"><span class="glyphicon glyphicon-remove"></span></a></td>
+                                    <td>
+										<a href="#" data-bind="click: $root.removeStock, tooltip: {title: 'Remove ' + symbol}"><span class="glyphicon glyphicon-remove"></span></a>
+									</td>
                                     <td><span class="stock-symbol" data-bind="text: symbol">N/A</span></td>
                                     <td><span class="stock-name" data-bind="text: name">Name Pending</span></td>
                                     <td>
