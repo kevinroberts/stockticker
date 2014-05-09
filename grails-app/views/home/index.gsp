@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="hidden">
-    %{--server-side variables for injected re-use in Javascript--}%
+    %{--server-side variables for injected re-use in Javascript backing modules--}%
 	<form>
     	<input type="hidden" name="stockServiceUrl" id="stockServiceUrl" value="${createLink(mapping: 'symbolScraped', params: [symbol : 'SYMBOL'])}">
 		<input type="hidden" name="stockFetchUrl" id="stockFetchUrl" value="${createLink(controller: 'home', action: 'symbolLookup')}">
@@ -54,7 +54,19 @@
                                     </ul>
                                 </div>
                             </div>
+							<div class="form-group pull-right">
+
+								<select class="form-control saved-stocks">
+									<option>Tech Stocks</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+								</select>
+								<button class="btn btn-default">Load List <span class="glyphicon glyphicon-log-in"></span> </button>
+							</div>
                         </form>
+
                     </div>
 
                     <div class="list-group stockTickerList">
