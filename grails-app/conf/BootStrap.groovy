@@ -19,7 +19,7 @@ class BootStrap {
                 def stock = new Stock(symbol: csvrow[0].trim(), name: csvrow[1], created : new Date())
 
                 if (!stock.save(flush: true)) {
-                    log.info("could not save stock symbol: " + csvrow[0])
+                    log.error("could not save stock symbol: " + csvrow[0])
                     stock.errors.each {// if save fails --> log reason
                         log.info it
                     }

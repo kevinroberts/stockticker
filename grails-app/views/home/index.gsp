@@ -43,7 +43,7 @@
 
                             <div class="form-group">
                                 <div class="btn-group">
-                                    <button class="btn btn-default" data-bind="click: addStock"><span class="glyphicon glyphicon-plus"></span> Add Stock</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+                                    <button class="btn btn-default addStockBtn" data-bind="click: addStock"><span class="glyphicon glyphicon-plus"></span> Add Stock</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a href="#" data-bind="click: clearStocks">Clear all stocks</a>
