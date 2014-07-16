@@ -3,7 +3,7 @@
 // Configure loading modules from the lib directory,
 // except 'app' ones,
 requirejs.config({
-     urlArgs: "bust=" + (new Date()).getTime(),
+     //"urlArgs": "bust=" + (new Date()).getTime(),
     "baseUrl": "js/lib",
     "paths": {
         "app": "../app",
@@ -18,6 +18,7 @@ requirejs.config({
 		"bootstrap-switch": "../lib/bootstrap-switch",
 		"typeahead": "../lib/typeahead.bundle",
 		"handlebars" : "../lib/handlebars-v1.3.0",
+		"underscore" : "../lib/underscore-min",
 		"utils" : "../app/utils"
     },
     "shim": {
@@ -52,6 +53,5 @@ requirejs.config({
 });
 
 // Load the main app module to start the app
-
 requirejs(["app/main", "app/initKnockout"]);
 

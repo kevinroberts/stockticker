@@ -7,5 +7,4 @@ require(['knockout', 'appViewModel', 'utils', 'domReady!'], function(ko, appView
 	// set interval to update all stocks every 6 seconds
 	utils.setStockInterval(setInterval(viewModel.updateStockTicker, 6000));
 
-
 });

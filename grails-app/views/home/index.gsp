@@ -11,12 +11,12 @@
 </head>
 <body>
 <div class="hidden">
-    %{--server-side variables for injected re-use in Javascript backing modules--}%
+    %{--server-side variables injected for re-use in Javascript backing modules--}%
 	<form>
     	<input type="hidden" name="stockServiceUrl" id="stockServiceUrl" value="${createLink(mapping: 'symbolScraped', params: [symbol : 'SYMBOL'])}">
 		<input type="hidden" name="stockFetchUrl" id="stockFetchUrl" value="${createLink(controller: 'home', action: 'symbolLookup')}">
     	<input type="hidden" name="loadingImageSrc" id="loadingImageSrc" value="${resource(dir: 'images', file: 'spinner.gif')}">
-	</form>
+    </form>
 </div>
 <div class="container">
     <div class="row clearfix">
@@ -56,22 +56,20 @@
                             </div>
 							<div class="form-group pull-right">
 
-								<select id="favoriteList" class="form-control saved-stocks">
-									<option>Tech Stocks</option>
-									<option>2</option>
-									<option>3</option>
-									<option>4</option>
-									<option>5</option>
-								</select>
+                                <select class="form-control saved-stocks" id="favoriteList" data-bind="options: stockLists,
+                                    optionsText: 'name',
+                                    optionsValue: 'id',
+                                    value: selectedList,
+                                    optionsCaption: 'Choose...'"></select>
 
 								<div class="btn-group">
-									<button class="btn btn-default"><span class="glyphicon glyphicon-log-in"></span> Load List</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+									<button class="btn btn-default" data-bind="click: loadStockList"><span class="glyphicon glyphicon-log-in"></span> Load List</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li>
-											<a href="#" data-bind="">Edit list name</a>
+											<a href="#" data-bind="click: editStockListName">Edit list name</a>
 										</li>
 										<li>
-											<a href="#">Remove list</a>
+											<a href="#" data-bind="click: removeStockList">Remove list</a>
 										</li>
 									</ul>
 								</div>

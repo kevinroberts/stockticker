@@ -1,14 +1,12 @@
 // Main viewmodel class
-define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment) {
+define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment, _) {
 
-// custom fade in animation binding
-//	ko.bindingHandlers.fadeInText = {
-//		update: function(element, valueAccessor) {
-//			$(element).hide();
-//			ko.bindingHandlers.text.update(element, valueAccessor);
-//			$(element).fadeIn();
-//		}
-//	};
+	var StockList = function(id, name, stocks) {
+		var self = this;
+		self.id = id;
+		self.stocks = ko.observableArray(stocks);
+		self.name = ko.observable(name);
+	}
 
     var Stock = function (id, symbol, name, price, prevPrice, priceChange, percentChange, lastUpdated) {
         var self = this;
@@ -48,23 +46,98 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
 
     };
 
+	var initStockLists = function() {
+		var stock1 = new Stock(utils.guid(), "NASDAQ:AAPL", "Apple Inc.", 0, 0, 0, 0, moment().format("lll"));
+		var stock2 = new Stock(utils.guid(), "NASDAQ:ADSK", "Autodesk, Inc.", 0, 0, 0, 0, moment().format("lll"));
+		var stock3 = new Stock(utils.guid(), "NASDAQ:INTC", "Intel Corp.", 0, 0, 0, 0, moment().format("lll"));
+		var stock4 = new Stock(utils.guid(), "NASDAQ:MSFT", "Microsoft Corp.", 0, 0, 0, 0, moment().format("lll"));
+
+		var stock5 = new Stock(utils.guid(), "NYSE:CMRE", "Costamare Inc.", 0, 0, 0, 0, moment().format("lll"));
+		var stock6 = new Stock(utils.guid(), "NYSE:FDX", "FedEx Corp.", 0, 0, 0, 0, moment().format("lll"));
+		var stock7 = new Stock(utils.guid(), "NYSE:LUV", "Southwest Airlines Co.", 0, 0, 0, 0, moment().format("lll"));
+
+		var initialStockLists = ko.observableArray([
+			new StockList("TECH1", "Tech Stocks", [stock1, stock2, stock3, stock4]),
+			new StockList("TRANSPORT1", "Transportation Stocks", [stock5, stock6, stock7])
+		]);
+		return initialStockLists;
+	};
+
     return function appViewModel() {
         var self = this;
 
 		// grab the AJAX url endpoint from server-side html
 		var serviceUrl = $("#stockServiceUrl").val().replace(/SYMBOL/g, '');
 
-        // initial data
+        // initial stock array
         self.stocks = ko.observableArray([]);
-
+		// container for the stock symbol text input field
         this.symbolToAdd = ko.observable("");
-
+		// flag for automatic update of stock prices
 		this.autoUpdate = ko.observable(true);
+		// container for StockList(s) -- could be loaded dynamically
+		self.stockLists = initStockLists();
+
+		// container for currently selected StockList from drop-down
+		self.selectedList = ko.observable();
 
 
         this.stockSymbolIsValid = ko.computed(function() {
-            return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^:]{1,15}\s*$/) != null);
+            return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^:\.]{1,15}\s*$/) != null);
         }, this);
+
+		self.getSelectedStockList = function() {
+			var selected = false;
+			_.each(self.stockLists(), function(list) {
+				if (list.id === self.selectedList()) {
+					selected = list;
+				}
+			});
+			return selected;
+		}
+
+		self.loadStockList = function() {
+			console.log("loading stock list: ", self.selectedList());
+			if (self.selectedList()) {
+				self.stocks.removeAll();
+				var list = self.getSelectedStockList();
+
+				utils.log("adding all the stocks from: " + list.name());
+
+				_.each(list.stocks(), function(stock) {
+					self.stocks.push(stock);
+				});
+
+			} else {
+				utils.showAlertMessage("Please select a valid list item from the drop-down.");
+			}
+		};
+
+		self.editStockListName = function() {
+			if (self.selectedList()) {
+				var list = self.getSelectedStockList();
+				bootbox.prompt("Enter New Name: ", function(result) {
+					if (result === null) {
+						utils.log("Name not entered in bootbox dialog");
+					} else {
+						utils.log("renaming list - " + result);
+						if (_.isString(result) && result.length > 0) {
+							list.name(result);
+						} else {
+							utils.showAlertMessage("The name you entered was not valid");
+						}
+					}
+				});
+			} else {
+				utils.showAlertMessage("Please select a valid list item from the drop-down.");
+			}
+		};
+
+		self.removeStockList = function() {
+			if (self.selectedList()) {
+				self.stockLists.remove(function(item) { return item.id == self.selectedList() });
+			}
+		};
 
         self.removeStock = function(stock) {
             self.stocks.remove(stock);
@@ -84,7 +157,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'blockui', 'knockout-bootstrap
                     utils.log("Stock symbol not entered in bootbox dialog");
                 } else {
                     utils.log("removing stock - " + result);
-                    self.stocks.remove(function(item) { return item.symbol == result })
+                    self.stocks.remove(function(item) { return item.symbol == result });
                 }
             });
         };
