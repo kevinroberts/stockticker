@@ -56,7 +56,11 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'blockui', 'knoc
 		var stock6 = new Stock(utils.guid(), "NYSE:FDX", "FedEx Corp.", 0, 0, 0, 0, moment().format("lll"));
 		var stock7 = new Stock(utils.guid(), "NYSE:LUV", "Southwest Airlines Co.", 0, 0, 0, 0, moment().format("lll"));
 
+		var stock8 = new Stock(utils.guid(), "NASDAQ:ICFI", "ICF International", 0, 0, 0, 0, moment().format("lll"));
+		var stock9 = new Stock(utils.guid(), "NASDAQ:AGNC", "American Capital Agency Corp.", 0, 0, 0, 0, moment().format("lll"));
+
 		var initialStockLists = ko.observableArray([
+			new StockList("FAVES1", "Favorite Stocks", [stock8, stock9, stock1]),
 			new StockList("TECH1", "Tech Stocks", [stock1, stock2, stock3, stock4]),
 			new StockList("TRANSPORT1", "Transportation Stocks", [stock5, stock6, stock7])
 		]);
