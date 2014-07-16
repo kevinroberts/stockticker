@@ -19,6 +19,8 @@ requirejs.config({
 		"typeahead": "../lib/typeahead.bundle",
 		"handlebars" : "../lib/handlebars-v1.3.0",
 		"underscore" : "../lib/underscore-min",
+		"stock" : "../model/stock",
+		"stockList" : "../model/stockList",
 		"utils" : "../app/utils"
     },
     "shim": {

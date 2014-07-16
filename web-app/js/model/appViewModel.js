@@ -1,52 +1,7 @@
 // Main viewmodel class
-define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment, _) {
+define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockList', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment, _, Stock, StockList) {
 
-	var StockList = function(id, name, stocks) {
-		var self = this;
-		self.id = id;
-		self.stocks = ko.observableArray(stocks);
-		self.name = ko.observable(name);
-	}
-
-    var Stock = function (id, symbol, name, price, prevPrice, priceChange, percentChange, lastUpdated) {
-        var self = this;
-        self.id = id;
-        self.symbol = symbol;
-        self.name = name;
-        self.price = ko.observable(price);
-		self.prevPrice = ko.observable(prevPrice);
-        self.priceChange = ko.observable(priceChange);
-		self.percentChange = ko.observable(percentChange);
-        self.lastUpdated = lastUpdated;
-
-        self.formattedPrice = ko.computed(function() {
-            var price = self.price();
-            var str = price ? "$" + price.toFixed(2) : "N/A";
-
-            return str;
-        });
-
-        self.formattedPriceChange = ko.computed(function() {
-            var newPrice = self.price();
-            var priceChange = self.priceChange();
-            var oldPrice = newPrice - priceChange;
-            var percentChange = (newPrice / oldPrice) * 100;
-
-            percentChange = percentChange - 100;
-
-            var positiveSign = '';
-            if (percentChange > 0) {
-                positiveSign = '+';
-            }
-			// use pre-formatted percent change provided by webservice call
-            var str = percentChange ? positiveSign + priceChange + " (" + self.percentChange() + ")" : "N/A";
-
-            return str;
-        });
-
-    };
-
-	var initStockLists = function() {
+	var _initStockLists = function() {
 		var stock1 = new Stock(utils.guid(), "NASDAQ:AAPL", "Apple Inc.", 0, 0, 0, 0, moment().format("lll"));
 		var stock2 = new Stock(utils.guid(), "NASDAQ:ADSK", "Autodesk, Inc.", 0, 0, 0, 0, moment().format("lll"));
 		var stock3 = new Stock(utils.guid(), "NASDAQ:INTC", "Intel Corp.", 0, 0, 0, 0, moment().format("lll"));
@@ -80,11 +35,10 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'blockui', 'knoc
 		// flag for automatic update of stock prices
 		this.autoUpdate = ko.observable(true);
 		// container for StockList(s) -- could be loaded dynamically
-		self.stockLists = initStockLists();
+		self.stockLists = _initStockLists();
 
 		// container for currently selected StockList from drop-down
 		self.selectedList = ko.observable();
-
 
         this.stockSymbolIsValid = ko.computed(function() {
             return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^:\.]{1,15}\s*$/) != null);
@@ -112,6 +66,20 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'blockui', 'knoc
 					self.stocks.push(stock);
 				});
 
+			} else {
+				utils.showAlertMessage("Please select a valid list item from the drop-down.");
+			}
+		};
+
+		self.saveStockList = function() {
+			if (self.selectedList()) {
+				var list = self.getSelectedStockList();
+				if (self.stocks().length > 0) {
+					list.stocks(self.stocks());
+					utils.showSuccessMessage(list.name() + " was saved with " + list.stocks().length + " stocks");
+				} else {
+					utils.showAlertMessage("Please add some stocks before saving to the " + list.name() + " list");
+				}
 			} else {
 				utils.showAlertMessage("Please select a valid list item from the drop-down.");
 			}
@@ -205,7 +173,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'blockui', 'knoc
                 self.stocks.sort(function(left, right) { return left.symbol == right.symbol ? 0 : (left.symbol > right.symbol ? -1 : 1) });
                 symbolSortToggle = false;
             }
-        }
+        };
 
 		self.lastUpdate = ko.computed(function() {
 			if (self.stocks().length > 0) {
@@ -227,7 +195,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'blockui', 'knoc
 				this.autoUpdate(true);
 				return true;
 			}
-		}
+		};
 
 		self.updateStockTicker = function() {
 			// iterate through stock array and fetch updated ticker information
@@ -275,8 +243,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'blockui', 'knoc
 			}
 
 
-		}
-
+		};
 
     };
 });

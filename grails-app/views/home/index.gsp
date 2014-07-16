@@ -30,6 +30,10 @@
                 </h4>
                 <p id="errorMessage" class="message"></p>
             </div>
+            <div id="successMsg" class="alert alert-success" style="display: none;">
+                <h4>Success.</h4>
+                <p id="successMessage" class="message"></p>
+            </div>
 
             <div class="row clearfix">
                 <div class="col-lg-8 column">
@@ -65,6 +69,9 @@
 								<div class="btn-group">
 									<button class="btn btn-default" data-bind="click: loadStockList"><span class="glyphicon glyphicon-log-in"></span> Load List</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
+                                        <li>
+                                            <a href="#" data-bind="click: saveStockList">Save current stocks</a>
+                                        </li>
 										<li>
 											<a href="#" data-bind="click: editStockListName">Edit list name</a>
 										</li>

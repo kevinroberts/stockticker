@@ -22,6 +22,14 @@ define("utils", ["jquery"], function ($) {
 			$('#errorMsg').slideDown().delay(5000).fadeOut();
 		}
 	}
+	function _showSuccessMessage(message) {
+		if ($('#successMsg').is(':visible')) {
+			$("#successMessage").html(message);
+		} else {
+			$("#successMessage").html(message);
+			$('#successMsg').slideDown().delay(5000).fadeOut();
+		}
+	}
 
 	function _showLoadingMessage(message) {
 		$.blockUI({ css: {
@@ -89,6 +97,9 @@ define("utils", ["jquery"], function ($) {
 		 */
 		showAlertMessage : function(message) {
 			return _showAlertMessage(message);
+		},
+		showSuccessMessage : function(message) {
+			return _showSuccessMessage(message);
 		},
 		showLoadingMessage : function(message) {
 			return _showLoadingMessage(message);
