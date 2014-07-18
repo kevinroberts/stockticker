@@ -69,15 +69,15 @@
 								<div class="btn-group">
 									<button class="btn btn-default" data-bind="click: loadStockList"><span class="glyphicon glyphicon-log-in"></span> Load List</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
-                                        <li>
-                                            <a href="#" data-bind="click: saveStockList">Save current stocks</a>
-                                        </li>
 										<li>
 											<a href="#" data-bind="click: editStockListName">Edit list name</a>
 										</li>
 										<li>
 											<a href="#" data-bind="click: removeStockList">Remove list</a>
 										</li>
+                                        <li>
+                                            <a href="#" data-bind="click: newStockList">Create new list</a>
+                                        </li>
 									</ul>
 								</div>
 
@@ -121,6 +121,11 @@
                             </table>
                         </div>
                         <a class="list-group-item active"><span class="badge stockcount" data-bind="text: stocks().length + ' stocks'">1</span>&nbsp;</a>
+                    </div>
+                    <div data-bind="visible: selectedList" class="form-group" style="display: none">
+                    <button data-bind="click: saveStockList" class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Save stocks
+                    </button>
                     </div>
 
                 </div>

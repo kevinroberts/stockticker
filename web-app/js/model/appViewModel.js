@@ -85,6 +85,22 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 			}
 		};
 
+		self.newStockList = function() {
+			bootbox.prompt("Enter a name for your new list: ", function(newName) {
+				if (newName === null) {
+					utils.log("New name not entered in bootbox dialog");
+				} else {
+					utils.log("new list - " + newName);
+					if (_.isString(newName) && newName.length > 0) {
+						self.stockLists.push(new StockList(utils.guid(), newName, []));
+						self.selectedList(self.stockLists()[self.stockLists().length-1].id);
+					} else {
+						utils.showAlertMessage("The name you entered was not valid");
+					}
+				}
+			});
+		};
+
 		self.editStockListName = function() {
 			if (self.selectedList()) {
 				var list = self.getSelectedStockList();

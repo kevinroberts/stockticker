@@ -1,7 +1,4 @@
 // Place third party dependencies in the lib folder
-//
-// Configure loading modules from the lib directory,
-// except 'app' ones,
 requirejs.config({
      //"urlArgs": "bust=" + (new Date()).getTime(),
     "baseUrl": "js/lib",
@@ -21,6 +18,7 @@ requirejs.config({
 		"underscore" : "../lib/underscore-min",
 		"stock" : "../model/stock",
 		"stockList" : "../model/stockList",
+		"dataStore" : "../app/datastore",
 		"utils" : "../app/utils"
     },
     "shim": {
