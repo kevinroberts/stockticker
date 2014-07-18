@@ -14,6 +14,28 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+            // namespacing utilities
+            (function(ns, window, undefined){
+                var base = (function(window) {
+                    var _use = function(){var a=arguments,o=null,i,j,d;for(i=0;i<a.length;i=i+1){d=a[i].split(".");o=window;for(j=0;j<d.length;j=j+1){o[d[j]]=o[d[j]]||{};o=o[d[j]];}}return o;};
+                    var _exists = function(v){var a=window,b,c,d,e;b=d=e=0;if(v){c=v.split(".");d=c.length;while(a&&e<d){a=a[c[e++]];}b=(a?1:0);}return !!b;};
+                    return {
+                        use:_use,
+                        exists:_exists
+                    };
+                })(window);
+                if (!base.exists(ns)) {
+                    var target = base.use(ns);
+                    for (var item in base) {
+                        target[item] = base[item];
+                    }
+                }
+            })('my.common.namespace', window);
+            (function(ns){
+                ns.isDevelopmentEnvironment = ${grails.util.Environment.current == grails.util.Environment.DEVELOPMENT ? true : false };
+            })(my.common.namespace.use('my.corp.ticker'));
+        </script>
         <g:if test="${grails.util.Environment.current == grails.util.Environment.PRODUCTION}">
             <link href="${resource(dir: 'css', file: 'custom-bootstrap.generated.min.css')}" type="text/css" rel="stylesheet" media="screen, projection">
             <link href="${resource(dir: 'css', file: 'theme.generated.min.css')}" type="text/css" rel="stylesheet" media="screen, projection">

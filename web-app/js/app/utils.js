@@ -3,7 +3,7 @@ define("utils", ["jquery"], function ($) {
 
 	var stockInterval = null;
 
-	function _countChar (val, length) {
+	function _countChar(val, length) {
 		var len = val.value.length;
 		if (len >= length) {
 			val.value = val.value.substring(0, length);
@@ -22,6 +22,7 @@ define("utils", ["jquery"], function ($) {
 			$('#errorMsg').slideDown().delay(5000).fadeOut();
 		}
 	}
+
 	function _showSuccessMessage(message) {
 		if ($('#successMsg').is(':visible')) {
 			$("#successMessage").html(message);
@@ -45,18 +46,21 @@ define("utils", ["jquery"], function ($) {
 
 	function _showStockLoadingMessage(message) {
 		var imgSrc = $("#loadingImageSrc").val();
-        $('.stockTickerList').block({
+		$('.stockTickerList').block({
 			message: '<h3> <img src="' + imgSrc + '" /> ' + message + '</h3>',
 			css: { border: '2px solid #a00' }
 		});
 	}
 
 	function _log(message, obj) {
-		if (typeof console == "object") {
-			if (obj && typeof(obj) != "undefined"){
-				console.log(message, obj);
-			} else {
-				console.log(message);
+		// only issue console logs in development environment
+		if (window['my']) {
+			if (my.corp.ticker.isDevelopmentEnvironment && typeof console == "object") {
+				if (obj && typeof(obj) != "undefined") {
+					console.log(message, obj);
+				} else {
+					console.log(message);
+				}
 			}
 		}
 	}
@@ -70,7 +74,7 @@ define("utils", ["jquery"], function ($) {
 		 * http://www.ietf.org/rfc/rfc4122.txt
 		 * @returns {string}
 		 */
-		guid : function() {
+		guid: function () {
 			var s = [];
 			var hexDigits = "0123456789abcdef";
 			for (var i = 0; i < 36; i++) {
@@ -83,10 +87,10 @@ define("utils", ["jquery"], function ($) {
 			var uuid = s.join("");
 			return uuid;
 		},
-		log : function(message, obj) {
+		log: function (message, obj) {
 			return _log(message, obj);
 		},
-		countChar : function(val, length) {
+		countChar: function (val, length) {
 			return _countChar(val, length);
 		},
 		/**
@@ -95,22 +99,22 @@ define("utils", ["jquery"], function ($) {
 		 * @param message
 		 * @returns {*}
 		 */
-		showAlertMessage : function(message) {
+		showAlertMessage: function (message) {
 			return _showAlertMessage(message);
 		},
-		showSuccessMessage : function(message) {
+		showSuccessMessage: function (message) {
 			return _showSuccessMessage(message);
 		},
-		showLoadingMessage : function(message) {
+		showLoadingMessage: function (message) {
 			return _showLoadingMessage(message);
 		},
-		showStockLoadingMessage : function(message) {
+		showStockLoadingMessage: function (message) {
 			return _showStockLoadingMessage(message);
 		},
-		setStockInterval : function(intVID) {
+		setStockInterval: function (intVID) {
 			stockInterval = intVID;
 		},
-		getStockInterval : function() {
+		getStockInterval: function () {
 			return stockInterval;
 		}
 	};
