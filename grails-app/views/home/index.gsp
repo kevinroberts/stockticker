@@ -64,14 +64,11 @@
                                     optionsText: 'name',
                                     optionsValue: 'id',
                                     value: selectedList,
-                                    optionsCaption: 'Choose...'"></select>
+                                    optionsCaption: 'Choose list...'"></select>
 
 								<div class="btn-group">
-									<button class="btn btn-default" data-bind="click: loadStockList"><span class="glyphicon glyphicon-log-in"></span> Load List</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+									<button class="btn btn-default" data-bind="click: editStockListName"><span class="glyphicon glyphicon-log-in"></span> edit list name</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li>
-											<a href="#" data-bind="click: editStockListName">Edit list name</a>
-										</li>
 										<li>
 											<a href="#" data-bind="click: removeStockList">Remove list</a>
 										</li>
