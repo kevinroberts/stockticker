@@ -61,7 +61,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 		self.selectedList = ko.observable();
 
         this.stockSymbolIsValid = ko.computed(function() {
-            return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^:\.]{1,15}\s*$/) != null);
+            return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^:]{1,15}\s*$/) != null);
         }, this);
 
 		self.saveSelectedText = ko.computed(function() {
@@ -196,31 +196,40 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 
         self.addStock = function() {
             if (this.symbolToAdd() && this.stockSymbolIsValid()) {
-                var symbol = encodeURI(this.symbolToAdd());
+                var symbol = encodeURIComponent(this.symbolToAdd());
 				utils.showStockLoadingMessage("Loading...");
-                $.getJSON(serviceUrl + symbol, function(stockData) {
-					$('.stockTickerList').unblock();
-					if (stockData.error && stockData.error.code) {
-                        utils.log("Service call contains errors...", stockData.error);
-                        utils.showAlertMessage(stockData.error.message);
-                    } else {
-						var stock = new Stock(utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.price, stockData.change, stockData.percentChange, moment().format("lll"));
-
-						var match = ko.utils.arrayFirst(self.stocks(), function(item) {
-							return stock.symbol === item.symbol;
-						});
-
-						// validate that the entered symbol is new
-						if (!match) {
-							utils.log('adding new stock: ', stock);
-							self.stocks.push(stock);
-							self.symbolToAdd(''); // clear the entered symbol for next input
-							$("#symbolToAdd").val('');
+				$.ajax({
+					url: serviceUrl + symbol,
+					dataType: 'json',
+					success: function( stockData ) {
+						$('.stockTickerList').unblock();
+						if (stockData.error && stockData.error.code) {
+							utils.log("Service call contains errors...", stockData.error);
+							utils.showAlertMessage(stockData.error.message);
 						} else {
-							utils.showAlertMessage("Symbol is already entered.");
+							var stock = new Stock(utils.guid(), stockData.symbol, stockData.name, stockData.price, stockData.price, stockData.change, stockData.percentChange, moment().format("lll"));
+
+							var match = ko.utils.arrayFirst(self.stocks(), function(item) {
+								return stock.symbol === item.symbol;
+							});
+
+							// validate that the entered symbol is new
+							if (!match) {
+								utils.log('adding new stock: ', stock);
+								self.stocks.push(stock);
+								self.symbolToAdd(''); // clear the entered symbol for next input
+								$("#symbolToAdd").val('');
+							} else {
+								utils.showAlertMessage("Symbol is already entered.");
+							}
 						}
-                    }
-                });
+					},
+					error: function( stockData ) {
+						utils.log("ajax error: ", stockData);
+						$('.stockTickerList').unblock();
+						utils.showAlertMessage("An unexpected server error has occurred. Please try a different stock. (" + stockData.statusText + ")");
+					}
+				});
             } else {
                 utils.showAlertMessage("Invalid ticker symbol entered.");
             }
@@ -265,41 +274,50 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 			if (self.stocks().length > 0) {
 				ko.utils.arrayForEach(self.stocks(), function(item) {
 					utils.log("updating: " + item.symbol);
-					$.getJSON(serviceUrl + item.symbol, function(stockData) {
-						if (stockData.error && stockData.error.code) {
-							utils.log("Service call contains errors...", stockData.error);
-						} else {
-							utils.log("Updated stock info from service call", stockData);
-							item.symbol = stockData.symbol;
-							item.prevPrice(item.price());
-							item.price(stockData.price);
-							item.priceChange(stockData.change);
-							item.percentChange(stockData.percentChange);
-                            item.lastUpdated = moment().format("lll");
-							utils.log("Updated stock prices - old: " + item.prevPrice() + " / new: " + item.price());
-							var data = self.stocks().slice(0);
-							self.stocks([]);
-							self.stocks(data);
-							// remove any color change for price change after short delay
-							var priceChange = item.price() - item.prevPrice();
-							if (priceChange > 0) {
-								utils.log("price has increased :" + priceChange);
-								$("#" + item.id + " .stock-price").removeClass('alert-danger');
-								$("#" + item.id + " .stock-price").addClass('alert-success').delay(1500).queue(function(nxt) {
-									$(this).removeClass("alert-success");
-									nxt();
-								});
+					$.ajax({
+						url: serviceUrl + encodeURIComponent(item.symbol),
+						dataType: 'json',
+						success: function( stockData ) {
+							if (stockData.error && stockData.error.code) {
+								utils.log("Service call contains errors...", stockData.error);
+							} else {
+								utils.log("Updated stock info from service call", stockData);
+								item.symbol = stockData.symbol;
+								item.prevPrice(item.price());
+								item.price(stockData.price);
+								item.priceChange(stockData.change);
+								item.percentChange(stockData.percentChange);
+								item.lastUpdated = moment().format("lll");
+								utils.log("Updated stock prices - old: " + item.prevPrice() + " / new: " + item.price());
+								var data = self.stocks().slice(0);
+								self.stocks([]);
+								self.stocks(data);
+								// remove any color change for price change after short delay
+								var priceChange = item.price() - item.prevPrice();
+								if (priceChange > 0) {
+									utils.log("price has increased :" + priceChange);
+									$("#" + item.id + " .stock-price").removeClass('alert-danger');
+									$("#" + item.id + " .stock-price").addClass('alert-success').delay(1500).queue(function(nxt) {
+										$(this).removeClass("alert-success");
+										nxt();
+									});
 
-							} else if (priceChange < 0) {
-								utils.log("price has gone down :" + priceChange);
-								$("#" + item.id + " .stock-price").removeClass('alert-success');
-								$("#" + item.id + " .stock-price").addClass('alert-danger').delay(1500).queue(function(dng) {
-									$(this).removeClass("alert-danger");
-									dng();
-								});
+								} else if (priceChange < 0) {
+									utils.log("price has gone down :" + priceChange);
+									$("#" + item.id + " .stock-price").removeClass('alert-success');
+									$("#" + item.id + " .stock-price").addClass('alert-danger').delay(1500).queue(function(dng) {
+										$(this).removeClass("alert-danger");
+										dng();
+									});
+								}
 							}
+						},
+						error: function( stockData ) {
+							utils.log("ajax error: ", stockData);
+							//utils.showAlertMessage("An unexpected server error has occurred when trying to update stocks.");
 						}
 					});
+
 				});
 
 			}

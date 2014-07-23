@@ -31,22 +31,27 @@ class FinanceService {
 	def StockResult getStockResultScraped(String stockSymbol) {
 		def tagsoupParser = new org.ccil.cowan.tagsoup.Parser()
 		def slurper = new XmlSlurper(tagsoupParser)
-		GPathResult htmlParser = slurper.parse("http://uk.advfn.com/p.php?pid=qkquote&btn=&epic=$stockSymbol&symbol=")
-
-		StockResult stockResult = new StockResult()
 
 		try {
+
+			GPathResult htmlParser = slurper.parse("http://uk.advfn.com/p.php?pid=qkquote&btn=&epic=$stockSymbol&symbol=")
+
+			StockResult stockResult = new StockResult()
+
+
 			int i = 0;
 			htmlParser.'**'.find{ it['@id'] == 'q_desc'}.'**'.findAll{ it.name() == 'td'}.each {
 				String value = it.text()
 				if (i == 0) {
 					// this is stock name
-					if (value)
+					if (value) {
 						stockResult.setName(StringUtils.replace(value, "Name:", ""));
+					}
 				}
 				if (i == 1) {
-					if (value)
+					if (value) {
 						stockResult.setSymbol(StringUtils.replace(value, "Symbol:", ""));
+					}
 				}
 				i++;
 			}
