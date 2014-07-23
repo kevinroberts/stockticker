@@ -25,6 +25,7 @@ module.exports = function (grunt) {
 	          baseUrl: "../js/lib",
 		      mainConfigFile: "../js/app.js",
 			  include: ['require.js'],
+			  preserveLicenseComments: false,
 		      out: "../js/app-optimized.js"
 	        }
 	      }
