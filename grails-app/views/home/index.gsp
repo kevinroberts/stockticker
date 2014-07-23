@@ -26,12 +26,12 @@
             </div>
             <div id="errorMsg" class="alert alert-danger" style="display: none;">
                 <h4>
-                    Alert!
+                    <g:message default="Alert!" code="app.alert"/>
                 </h4>
                 <p id="errorMessage" class="message"></p>
             </div>
             <div id="successMsg" class="alert alert-success" style="display: none;">
-                <h4>Success.</h4>
+                <h4><g:message default="Success" code="app.success"/>.</h4>
                 <p id="successMessage" class="message"></p>
             </div>
 
@@ -41,19 +41,19 @@
                     <div class="action-group">
                         <form class="form-inline" role="form">
                             <div class="form-group" data-bind=" css: { 'has-error': !stockSymbolIsValid() }">
-                                <label class="sr-only" for="symbolToAdd">Enter Stock Symbol</label>
+                                <label class="sr-only" for="symbolToAdd"><g:message code="app.enterSymbol" default="Enter Stock Symbol"/></label>
                                 <input id="symbolToAdd" type="text" class="form-control" data-bind="value: symbolToAdd, valueUpdate: 'keyup'" placeholder="Stock Symbol" autofocus="" autocomplete="off" />
                             </div>
 
                             <div class="form-group">
                                 <div class="btn-group">
-                                    <button class="btn btn-default addStockBtn" data-bind="click: addStock"><span class="glyphicon glyphicon-plus"></span> Add Stock</button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
+                                    <button class="btn btn-default addStockBtn" data-bind="click: addStock"><span class="glyphicon glyphicon-plus"></span> <g:message code="app.addStock" default="Add Stock"/></button> <button data-toggle="dropdown" class="btn btn-default dropdown-toggle"><span class="caret"></span></button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="#" data-bind="click: clearStocks">Clear all stocks</a>
+                                            <a href="#" data-bind="click: clearStocks"><g:message code="app.clearAll" default="Clear all stocks"/></a>
                                         </li>
                                         <li>
-                                            <a href="#" data-bind="click: removeBySymbol">Remove Stock by Symbol</a>
+                                            <a href="#" data-bind="click: removeBySymbol"><g:message code="app.removeBySymbol" default="Remove Stock by Symbol"/></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -94,10 +94,10 @@
                                 <thead>
                                 <tr>
                                     <th>&nbsp;</th>
-                                    <th><a href="#"><span class="glyphicon glyphicon-sort" data-bind="click: $root.sortStocksBySymbol, tooltip: {title: 'Sort by name'}"></span></a> Stock Symbol</th>
-                                    <th>Name&nbsp; <span class="stock-updated" data-bind="text: lastUpdate()"></span></th>
-                                    <th>Price</th>
-                                    <th>Change</th>
+                                    <th><a href="#"><span class="glyphicon glyphicon-sort" data-bind="click: $root.sortStocksBySymbol, tooltip: {title: 'Sort by name'}"></span></a> <g:message code="app.stockSymbol" default="Stock Symbol"/></th>
+                                    <th><g:message code="app.stockName" default="Name"/>&nbsp; <span class="stock-updated" data-bind="text: lastUpdate()"></span></th>
+                                    <th><g:message code="app.price" default="Price"/></th>
+                                    <th><g:message code="app.change" default="Change"/></th>
                                 </tr>
                                 </thead>
                                 <tbody data-bind="foreach: stocks">

@@ -1,4 +1,4 @@
-define("dataStore", function() {
+define("dataStore",["knockout"], function (ko) {
 	'use strict';
 
 	function hasLocalStore() {
@@ -23,7 +23,7 @@ define("dataStore", function() {
 		if (persist) {
 			if (hasLocalStore()) {
 				try {
-					localStorage.setItem(key, JSON.stringify(value));
+					localStorage.setItem(key, ko.toJSON(value));
 				} catch (error) {
 					if (error.name && error.name === "QuotaExceededError") {
 						quotaExceeded(localStorage);
@@ -38,7 +38,7 @@ define("dataStore", function() {
 		} else {
 			if (hasSessionStore()) {
 				try {
-					sessionStorage.setItem(key, JSON.stringify(value));
+					sessionStorage.setItem(key, ko.toJSON(value));
 				} catch (error) {
 					if (error.name && error.name === "QuotaExceededError") {
 						quotaExceeded(sessionStorage);
@@ -113,6 +113,7 @@ define("dataStore", function() {
 	function clearAll(persisted) {
 		if (!persisted) {
 			sessionStorage.clear();
+			localStorage.clear();
 		} else {
 			localStorage.clear();
 		}
@@ -123,8 +124,9 @@ define("dataStore", function() {
 		getItem: function(key) {
 			return getData(key) === undefined ? null : getData(key);
 		},
-		setItem: function(key, value, persist) {
-			return setData(key, value, persist);
+		setItem: function(key, value) {
+			// default to using local storage
+			return setData(key, value, true);
 		},
 		removeItem: function(key) {
 			return removeData(key);

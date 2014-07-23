@@ -1,4 +1,4 @@
-define("utils", ["jquery"], function ($) {
+define("utils", ["jquery", "dataStore"], function ($, dataStore) {
 	'use strict';
 
 	var stockInterval = null;

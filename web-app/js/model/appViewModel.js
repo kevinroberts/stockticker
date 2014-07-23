@@ -1,5 +1,5 @@
 // Main viewmodel class
-define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockList', 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment, _, Stock, StockList) {
+define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockList', 'dataStore' , 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment, _, Stock, StockList, dataStore) {
 
 	var _initStockLists = function() {
 		var stock1 = new Stock(utils.guid(), "NASDAQ:AAPL", "Apple Inc.", 0, 0, 0, 0, moment().format("lll"));
@@ -14,12 +14,32 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 		var stock8 = new Stock(utils.guid(), "NASDAQ:ICFI", "ICF International", 0, 0, 0, 0, moment().format("lll"));
 		var stock9 = new Stock(utils.guid(), "NASDAQ:AGNC", "American Capital Agency Corp.", 0, 0, 0, 0, moment().format("lll"));
 
-		var initialStockLists = ko.observableArray([
-			new StockList("FAVES1", "Favorite Stocks", [stock8, stock9, stock1]),
-			new StockList("TECH1", "Tech Stocks", [stock1, stock2, stock3, stock4]),
-			new StockList("TRANSPORT1", "Transportation Stocks", [stock5, stock6, stock7])
-		]);
-		return initialStockLists;
+
+		// attempt to load existing lists from browser storage
+		if (!_.isNull(dataStore.getItem("stockLists"))) {
+			utils.log("Loading stock lists form local browser storage");
+			var initialStockLists = dataStore.getItem("stockLists");
+			var newStockLists =  ko.observableArray([]);
+
+			ko.utils.arrayMap(initialStockLists, function(list) {
+				var stocks = ko.observableArray([]);
+				ko.utils.arrayMap(list.stocks, function(stock) {
+					stocks.push(new Stock(stock.id, stock.symbol, stock.name, stock.price, stock.prevPrice, stock.priceChange, stock.lastUpdated));
+				});
+				newStockLists.push(new StockList(list.id, list.name, stocks()));
+			});
+
+			return newStockLists;
+		} else {
+			var initialStockLists = ko.observableArray([
+				new StockList("FAVES1", "Favorite Stocks", [stock8, stock9, stock1]),
+				new StockList("TECH1", "Tech Stocks", [stock1, stock2, stock3, stock4]),
+				new StockList("TRANSPORT1", "Transportation Stocks", [stock5, stock6, stock7])
+			]);
+			dataStore.setItem("stockLists", initialStockLists());
+
+			return initialStockLists;
+		}
 	};
 
     return function appViewModel() {
@@ -68,7 +88,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 				}
 			});
 			return selected;
-		}
+		};
 
 		self.loadStockList = function() {
 			console.log("loading stock list: ", self.selectedList());
@@ -92,6 +112,8 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 				var list = self.getSelectedStockList();
 				if (self.stocks().length > 0) {
 					list.stocks(self.stocks());
+					// persist changes to local storage
+					dataStore.setItem("stockLists", self.stockLists);
 					utils.showSuccessMessage(list.name() + " was saved with " + list.stocks().length + " stocks");
 				} else {
 					utils.showAlertMessage("Please add some stocks before saving to the " + list.name() + " list");
@@ -110,6 +132,8 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 					if (_.isString(newName) && newName.length > 0) {
 						self.stockLists.push(new StockList(utils.guid(), newName, []));
 						self.selectedList(self.stockLists()[self.stockLists().length-1].id);
+						// persist changes to local storage
+						dataStore.setItem("stockLists", self.stockLists);
 					} else {
 						utils.showAlertMessage("The name you entered was not valid");
 					}
@@ -127,6 +151,8 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 						utils.log("renaming list - " + result);
 						if (_.isString(result) && result.length > 0) {
 							list.name(result);
+							// persist changes to local storage
+							dataStore.setItem("stockLists", self.stockLists);
 						} else {
 							utils.showAlertMessage("The name you entered was not valid");
 						}
@@ -140,6 +166,8 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 		self.removeStockList = function() {
 			if (self.selectedList()) {
 				self.stockLists.remove(function(item) { return item.id == self.selectedList() });
+				// persist changes to local storage
+				dataStore.setItem("stockLists", self.stockLists);
 			}
 		};
 
@@ -196,7 +224,8 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
             } else {
                 utils.showAlertMessage("Invalid ticker symbol entered.");
             }
-        }
+        };
+
         var symbolSortToggle = false;
         self.sortStocksBySymbol = function() {
             if (!symbolSortToggle) {
