@@ -124,7 +124,7 @@
                     </div>
                     <div data-bind="visible: selectedList" class="form-group" style="display: none">
                     <button data-bind="click: saveStockList" class="btn btn-default" type="button">
-                        <span class="glyphicon glyphicon-floppy-disk"></span> Save stocks
+                        <span class="glyphicon glyphicon-floppy-disk"></span> <span data-bind="text: saveSelectedText">Save to list</span>
                     </button>
                     </div>
 

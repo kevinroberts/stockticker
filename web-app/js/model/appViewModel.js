@@ -44,6 +44,22 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
             return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^:\.]{1,15}\s*$/) != null);
         }, this);
 
+		self.saveSelectedText = ko.computed(function() {
+			if (self.selectedList()) {
+				var list = self.getSelectedStockList();
+				return "Save stocks to " + list.name();
+			} else {
+				return "Save to list";
+			}
+		}, this);
+
+		self.selectedList.subscribe(function (selectedID) {
+			if (selectedID) {
+				utils.log("Selected list has changed -- loading new list's stocks into view", selectedID);
+				self.loadStockList();
+			}
+		});
+
 		self.getSelectedStockList = function() {
 			var selected = false;
 			_.each(self.stockLists(), function(list) {
@@ -171,6 +187,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 							utils.log('adding new stock: ', stock);
 							self.stocks.push(stock);
 							self.symbolToAdd(''); // clear the entered symbol for next input
+							$("#symbolToAdd").val('');
 						} else {
 							utils.showAlertMessage("Symbol is already entered.");
 						}
