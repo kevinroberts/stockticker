@@ -1,4 +1,4 @@
-define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockList', 'dataStore' , 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment, _, Stock, StockList, dataStore) {
+define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockList', 'dataStore' , 'mousetrap' , 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment, _, Stock, StockList, dataStore, Mousetrap) {
 
 	var _initStockLists = function() {
 		var stock1 = new Stock(utils.guid(), "NASDAQ:AAPL", "Apple Inc.", 0, 0, 0, 0, moment().format("lll"));
@@ -121,6 +121,10 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 				utils.showAlertMessage("Please select a valid list item from the drop-down.");
 			}
 		};
+		// add keyboard shortcuts for saving
+		Mousetrap.bind(['ctrl+s', 'command+s'], function(e) {
+			self.saveStockList();
+		});
 
 		self.newStockList = function() {
 			bootbox.prompt("Enter a name for your new list: ", function(newName) {

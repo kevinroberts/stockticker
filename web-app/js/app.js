@@ -19,6 +19,7 @@ requirejs.config({
 		"stock" : "../model/stock",
 		"stockList" : "../model/stockList",
 		"dataStore" : "../app/datastore",
+		"mousetrap" : "../lib/mousetrap.min",
 		"utils" : "../app/utils"
     },
     "shim": {
