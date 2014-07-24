@@ -65,8 +65,6 @@ class HomeController {
 
         }
 
-
-
         render stockResult as GSON
 
     }
