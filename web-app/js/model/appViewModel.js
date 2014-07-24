@@ -1,4 +1,3 @@
-// Main viewmodel class
 define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockList', 'dataStore' , 'blockui', 'knockout-bootstrap'], function(ko, bootbox, utils, moment, _, Stock, StockList, dataStore) {
 
 	var _initStockLists = function() {
@@ -42,6 +41,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 		}
 	};
 
+	// Main View Model class for the Stock ticker application
     return function appViewModel() {
         var self = this;
 
@@ -51,17 +51,16 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
         // initial stock array
         self.stocks = ko.observableArray([]);
 		// container for the stock symbol text input field
-        this.symbolToAdd = ko.observable("");
+        self.symbolToAdd = ko.observable("");
 		// flag for automatic update of stock prices
-		this.autoUpdate = ko.observable(true);
+		self.autoUpdate = ko.observable(true);
 		// container for StockList(s) -- could be loaded dynamically
 		self.stockLists = _initStockLists();
-
 		// container for currently selected StockList from drop-down
 		self.selectedList = ko.observable();
 
         this.stockSymbolIsValid = ko.computed(function() {
-            return (this.symbolToAdd() == "") || (this.symbolToAdd().match(/^\s*[a-zA-Z0-9_^:]{1,15}\s*$/) != null);
+            return (self.symbolToAdd() == "") || (self.symbolToAdd().match(/^\s*[a-zA-Z0-9_^:]{1,15}\s*$/) != null);
         }, this);
 
 		self.saveSelectedText = ko.computed(function() {
@@ -195,8 +194,8 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
         };
 
         self.addStock = function() {
-            if (this.symbolToAdd() && this.stockSymbolIsValid()) {
-                var symbol = encodeURIComponent(this.symbolToAdd());
+            if (self.symbolToAdd() && this.stockSymbolIsValid()) {
+                var symbol = encodeURIComponent(self.symbolToAdd());
 				utils.showStockLoadingMessage("Loading...");
 				$.ajax({
 					url: serviceUrl + symbol,
@@ -238,10 +237,23 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
         var symbolSortToggle = false;
         self.sortStocksBySymbol = function() {
             if (!symbolSortToggle) {
-                self.stocks.sort(function(left, right) { return left.symbol == right.symbol ? 0 : (left.symbol < right.symbol ? -1 : 1) });
+                self.stocks.sort(function(left, right) {
+					if (left.symbol.indexOf(':') && right.symbol.indexOf(':')) {
+						return left.symbol.substr(left.symbol.indexOf(':')+1, left.symbol.length) == right.symbol.substr(right.symbol.indexOf(':')+1, right.symbol.length) ? 0 : (left.symbol.substr(left.symbol.indexOf(':')+1, left.symbol.length) < right.symbol.substr(right.symbol.indexOf(':')+1, right.symbol.length) ? -1 : 1)
+					} else {
+						return left.symbol == right.symbol ? 0 : (left.symbol < right.symbol ? -1 : 1)
+					}
+				});
                 symbolSortToggle = true;
             } else {
-                self.stocks.sort(function(left, right) { return left.symbol == right.symbol ? 0 : (left.symbol > right.symbol ? -1 : 1) });
+                self.stocks.sort(function(left, right) {
+					if (left.symbol.indexOf(':') && right.symbol.indexOf(':')) {
+						return left.symbol.substr(left.symbol.indexOf(':')+1, left.symbol.length) == right.symbol.substr(right.symbol.indexOf(':')+1, right.symbol.length) ? 0 : (left.symbol.substr(left.symbol.indexOf(':')+1, left.symbol.length) > right.symbol.substr(right.symbol.indexOf(':')+1, right.symbol.length) ? -1 : 1)
+					} else {
+						return left.symbol == right.symbol ? 0 : (left.symbol > right.symbol ? -1 : 1)
+					}
+				});
+
                 symbolSortToggle = false;
             }
         };
@@ -255,15 +267,15 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 		}, this);
 
 		self.toggleAutoUpdate = function() {
-			if (this.autoUpdate()) {
+			if (self.autoUpdate()) {
 				utils.log("stopping auto update - " + moment().format("h:mm:ss a"));
 				clearInterval(utils.getStockInterval());
-				this.autoUpdate(false);
+				self.autoUpdate(false);
 				return true;
 			} else {
 				utils.log("starting auto update - " + moment().format("h:mm:ss a"));
 				utils.setStockInterval(setInterval(this.updateStockTicker, 6000));
-				this.autoUpdate(true);
+				self.autoUpdate(true);
 				return true;
 			}
 		};

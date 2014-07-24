@@ -5,6 +5,9 @@ define("stockList", ["jquery", "knockout" ], function( $, ko ) {
 	 * Stock List object
 	 * A model of a list of stocks objects
 	 * with additional meta information
+	 * @param {String} id a unique identifier for this list
+	 * @param {String} name a user friendly identifier for this stock list
+	 * @param {array} an array of Stock objects
 	 * @returns {object} StockList
 	 */
 	return function(id, name, stocks) {

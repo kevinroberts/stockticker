@@ -5,6 +5,13 @@ define("stock", ["jquery", "knockout" ], function( $, ko ) {
 	 * Stock object
 	 * A model of a capital stock containing
 	 * pricing and other basic information about the equity
+	 * @param {String} id a unique identifier for this stock
+	 * @param {String} symbol the ticker symbol for this stock
+	 * @param {String} name of the stock
+	 * @param {Number} price the stocks current price
+	 * @param {Number} priceChange number to indicate the overall change in price from the last update
+	 * @param {Number} percentChange number to indicate the overall change in percent from the last update
+	 * @param {String} lastUpdate - a timestamp to indicate when the last update was made (use something like moment().format("lll")
 	 * @returns {object} Stock
 	 */
 	return function (id, symbol, name, price, prevPrice, priceChange, percentChange, lastUpdated) {
