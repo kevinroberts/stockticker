@@ -94,7 +94,7 @@
                                 <thead>
                                 <tr>
                                     <th>&nbsp;</th>
-                                    <th><a href="#"><span class="glyphicon glyphicon-sort" data-bind="click: $root.sortStocksBySymbol, tooltip: {title: 'Sort by name'}"></span></a> <g:message code="app.stockSymbol" default="Stock Symbol"/></th>
+                                    <th><a href="#"><span class="glyphicon glyphicon-sort" data-bind="click: $root.sortStocksBySymbol, tooltip: {title: 'Sort by symbol'}"></span></a> <g:message code="app.stockSymbol" default="Stock Symbol"/></th>
                                     <th><g:message code="app.stockName" default="Name"/>&nbsp; <span class="stock-updated" data-bind="text: lastUpdate()"></span></th>
                                     <th><g:message code="app.price" default="Price"/></th>
                                     <th><g:message code="app.change" default="Change"/></th>
