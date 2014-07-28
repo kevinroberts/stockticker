@@ -106,7 +106,9 @@
 										<a href="#" data-bind="click: $root.removeStock, tooltip: {title: 'Remove ' + symbol}"><span class="glyphicon glyphicon-remove"></span></a>
 									</td>
                                     <td><span class="stock-symbol" data-bind="text: symbol">N/A</span></td>
-                                    <td><span class="stock-name" data-bind="text: name">Name Pending</span></td>
+                                    <td>
+                                        <a class="stock-name" target="_blank" data-bind="attr: { href: 'http://stocktwits.com/symbol/' + symbol, title: 'more info on ' + name }, text: name" href="#">Name Pending</a>
+                                    </td>
                                     <td>
                                         <span class="stock-price" data-bind="text: formattedPrice ">-</span>
                                     </td>

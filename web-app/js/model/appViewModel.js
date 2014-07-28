@@ -92,6 +92,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 		self.loadStockList = function() {
 			console.log("loading stock list: ", self.selectedList());
 			if (self.selectedList()) {
+				utils.showStockLoadingMessage("Loading...");
 				self.stocks.removeAll();
 				var list = self.getSelectedStockList();
 
@@ -100,7 +101,7 @@ define(['knockout', 'bootbox', 'utils', 'moment', 'underscore', 'stock', 'stockL
 				_.each(list.stocks(), function(stock) {
 					self.stocks.push(stock);
 				});
-
+				$('.stockTickerList').unblock();
 			} else {
 				utils.showAlertMessage("Please select a valid list item from the drop-down.");
 			}
