@@ -43,7 +43,7 @@ class FinanceService {
 
 		try {
 			int i = 0;
-			htmlParser.'**'.find{ it['@id'] == 'q_desc'}.'**'.findAll{ it.name() == 'td'}.each {
+			htmlParser.'**'.find{ it['@id'] == 'maincontent'}.'**'.findAll{ it.name() == 'td'}.each {
 				String value = it.text()
 				if (i == 0) {
 					// this is stock name
@@ -54,26 +54,20 @@ class FinanceService {
 					if (value)
 						stockResult.setSymbol(StringUtils.replace(value, "Symbol:", ""));
 				}
+				// change in value
+				if (i == 7) {
+					stockResult.setChange(new BigDecimal(value))
+				}
+				if (i == 8) {
+					stockResult.setPercentChange(value + "%")
+				}
+				if (i == 9) {
+					stockResult.setPrice(new BigDecimal(value))
+				}
 				i++;
 			}
 
-			// get price information
-			i = 0;
-			htmlParser.'**'.findAll{ it['@class'] == 'mb'}.each {
-				String value = it.text()
-				// change in value
-				if (i == 15) {
-					stockResult.setChange(new BigDecimal(value))
-				}
-				if (i == 16) {
-					stockResult.setPercentChange(value + "%")
-				}
-				if (i == 17) {
-					stockResult.setPrice(new BigDecimal(value))
-				}
 
-				i++
-			}
 
 			if (!stockResult.name) {
 				stockResult.setError(this.noResultsReturned(stockSymbol))
